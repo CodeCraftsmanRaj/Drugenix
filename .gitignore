@@ -13,7 +13,7 @@ __pycache__/
 
 # Outputs and artifacts
 outputs/
-plots/
+# plots/
 *.jsonl
 
 # IDE

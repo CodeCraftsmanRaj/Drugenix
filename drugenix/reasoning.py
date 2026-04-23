@@ -23,6 +23,7 @@ _DRUG_SUFFIXES = (
 )
 
 _CANDIDATE_RE = re.compile(r"\b([A-Za-z][A-Za-z0-9\-]{2,})\b")
+_DRUG_KEYWORDS = ("inhibitor", "agonist", "antagonist", "activator", "blocker", "therapy", "treatment", "drug", "agent", "compound", "receptor", "target")
 
 
 def _normalize_base_url(url: str) -> str:
@@ -206,28 +207,39 @@ def _average_groundedness(candidates: list[DrugCandidate], docs: list[EvidenceDo
 
 
 def _heuristic_reason(docs: list[EvidenceDoc]) -> list[DrugCandidate]:
-    evidence_map: dict[str, set[str]] = defaultdict(set)
-    mechanism_map: dict[str, list[str]] = defaultdict(list)
+    drug_candidates_by_pmid: dict[str, list[tuple[str, str]]] = defaultdict(list)
 
     for doc in docs:
         text = f"{doc.title}. {doc.abstract}".replace("\n", " ")
         sentences = [s.strip() for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]
 
         for sentence in sentences:
+            lower_sent = sentence.lower()
+            has_drug_context = any(kw in lower_sent for kw in _DRUG_KEYWORDS)
+            if not has_drug_context:
+                continue
+
             for match in _CANDIDATE_RE.finditer(sentence):
                 token = match.group(1)
                 lower = token.lower()
 
-                if any(lower.endswith(sfx) for sfx in _DRUG_SUFFIXES):
+                if any(lower.endswith(sfx) for sfx in _DRUG_SUFFIXES) or (has_drug_context and len(token) > 3):
                     name = token[0].upper() + token[1:]
-                    evidence_map[name].add(doc.pmid)
-                    if len(mechanism_map[name]) < 3:
-                        mechanism_map[name].append(sentence[:220])
+                    if name not in [x[0] for x in drug_candidates_by_pmid[doc.pmid]]:
+                        drug_candidates_by_pmid[doc.pmid].append((name, sentence[:250]))
+
+    evidence_map: dict[str, set[str]] = defaultdict(set)
+    mechanism_map: dict[str, list[str]] = defaultdict(list)
+    for pmid, drugs_and_sents in drug_candidates_by_pmid.items():
+        for drug, sent in drugs_and_sents:
+            evidence_map[drug].add(pmid)
+            if len(mechanism_map[drug]) < 2:
+                mechanism_map[drug].append(sent)
 
     candidates: list[DrugCandidate] = []
     for drug, pmids in evidence_map.items():
         support = len(pmids)
-        confidence = min(0.95, 0.25 + 0.15 * support)
+        confidence = min(0.85, 0.35 + 0.12 * support)
         mechanism = " ".join(mechanism_map.get(drug, []))
         candidates.append(
             DrugCandidate(
@@ -239,7 +251,7 @@ def _heuristic_reason(docs: list[EvidenceDoc]) -> list[DrugCandidate]:
         )
 
     candidates.sort(key=lambda c: (c.confidence, len(c.evidence_pmids)), reverse=True)
-    return candidates[:10]
+    return candidates[:15]
 
 
 def generate_candidates(disease_query: str, docs: list[EvidenceDoc]) -> list[DrugCandidate]:
