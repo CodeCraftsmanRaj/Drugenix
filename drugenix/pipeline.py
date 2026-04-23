@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from dataclasses import asdict
 
 from drugenix.reasoning import generate_candidates
@@ -12,6 +13,13 @@ def run_pipeline(disease_query: str, retmax: int = 40, top_k: int = 8) -> dict:
 
     return {
         "query": disease_query,
+        "runtime": {
+            "llm_provider": os.getenv("LLM_PROVIDER", "openai"),
+            "openai_model": os.getenv("OPENAI_MODEL", ""),
+            "gemini_model": os.getenv("GEMINI_MODEL", ""),
+            "ollama_model": os.getenv("OLLAMA_MODEL", ""),
+            "custom_model": os.getenv("LLM_MODEL", ""),
+        },
         "retrieved": [asdict(d) for d in retrieved_docs],
         "candidates": [asdict(c) for c in candidates],
     }

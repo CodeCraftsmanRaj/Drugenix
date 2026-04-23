@@ -1,0 +1,25 @@
+{
+  "retrieval": {
+    "P@1": 0.0,
+    "P@3": 0.0,
+    "P@5": 0.0,
+    "P@10": 0.0,
+    "nDCG@1": 0.0,
+    "nDCG@3": 0.0,
+    "nDCG@5": 0.0,
+    "nDCG@10": 0.0
+  },
+  "generation": {
+    "Top-1 Accuracy": 0.0,
+    "Top-3 Accuracy": 0.0,
+    "Top-5 Accuracy": 0.0,
+    "Top-10 Accuracy": 0.0,
+    "groundedness_scores": []
+  },
+  "ablation": {
+    "without_rag_correctness": 0.0,
+    "with_rag_correctness": 0.0,
+    "without_rag_groundedness": 0.0,
+    "with_rag_groundedness": 0.0
+  }
+}

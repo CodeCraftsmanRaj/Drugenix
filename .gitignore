@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+
+# Virtual environment
+.venv/
+
+# Local environment files
+.env
+.env.*
+
+# Outputs and artifacts
+outputs/
+plots/
+*.jsonl
+
+# IDE
+.vscode/

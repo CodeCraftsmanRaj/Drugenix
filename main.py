@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -36,12 +37,69 @@ def _build_parser() -> argparse.ArgumentParser:
         default="",
         help="Optional path to save full output JSON.",
     )
+    parser.add_argument(
+        "--provider",
+        type=str,
+        default="",
+        help="LLM provider: openai | gemini | ollama | custom(openai-compatible).",
+    )
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="",
+        help="Model name for selected provider.",
+    )
+    parser.add_argument(
+        "--base-url",
+        type=str,
+        default="",
+        help="Override provider base URL.",
+    )
+    parser.add_argument(
+        "--api-key",
+        type=str,
+        default="",
+        help="Optional API key override for selected provider.",
+    )
     return parser
 
 
 def main() -> None:
     parser = _build_parser()
     args = parser.parse_args()
+
+    if args.provider:
+        provider = args.provider.strip().lower()
+        os.environ["LLM_PROVIDER"] = provider
+
+        if provider in {"openai", "open-ai"}:
+            if args.api_key:
+                os.environ["OPENAI_API_KEY"] = args.api_key
+            if args.model:
+                os.environ["OPENAI_MODEL"] = args.model
+            if args.base_url:
+                os.environ["OPENAI_BASE_URL"] = args.base_url
+        elif provider in {"gemini", "gemmini", "google"}:
+            if args.api_key:
+                os.environ["GEMINI_API_KEY"] = args.api_key
+            if args.model:
+                os.environ["GEMINI_MODEL"] = args.model
+            if args.base_url:
+                os.environ["GEMINI_BASE_URL"] = args.base_url
+        elif provider == "ollama":
+            if args.api_key:
+                os.environ["OLLAMA_API_KEY"] = args.api_key
+            if args.model:
+                os.environ["OLLAMA_MODEL"] = args.model
+            if args.base_url:
+                os.environ["OLLAMA_BASE_URL"] = args.base_url
+        else:
+            if args.api_key:
+                os.environ["LLM_API_KEY"] = args.api_key
+            if args.model:
+                os.environ["LLM_MODEL"] = args.model
+            if args.base_url:
+                os.environ["LLM_BASE_URL"] = args.base_url
 
     result = run_pipeline(
         disease_query=args.disease_query,

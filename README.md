@@ -38,6 +38,25 @@ Set environment variables:
 - `OPENAI_MODEL` (optional, default: `gpt-4.1-mini`)
 - `OPENAI_BASE_URL` (optional, default: `https://api.openai.com/v1`)
 
+Additional providers are supported:
+
+- **Gemini** (includes `gemmini` alias support):
+	- `LLM_PROVIDER=gemini`
+	- `GEMINI_API_KEY`
+	- `GEMINI_MODEL` (default: `gemini-2.0-flash`)
+	- `GEMINI_BASE_URL` (default: `https://generativelanguage.googleapis.com/v1beta/openai`)
+
+- **Ollama**:
+	- `LLM_PROVIDER=ollama`
+	- `OLLAMA_MODEL` (example: `llama3.2:latest`, `qwen3.5:4b`)
+	- `OLLAMA_BASE_URL` (default: `http://localhost:11434/v1`)
+
+- **OpenAI-compatible custom providers** (OpenRouter/Groq/Together etc.):
+	- `LLM_PROVIDER=<name>`
+	- `LLM_API_KEY`
+	- `LLM_MODEL`
+	- `LLM_BASE_URL`
+
 If no API key is set, the system automatically uses heuristic reasoning.
 
 ### 3) Execute pipeline
@@ -52,6 +71,12 @@ Or with script entrypoint:
 
 ```bash
 drugenix "Type 2 diabetes" --retmax 40 --top-k 8
+```
+
+Provider from CLI (preferred for experiments):
+
+```bash
+python main.py "Parkinson disease" --provider ollama --model llama3.2:latest --retmax 40 --top-k 8 --save-json outputs/parkinson_ollama.json
 ```
 
 ## Output format
@@ -69,6 +94,51 @@ For this stage, track:
 - **Top-k retrieval relevance** (manual relevance checks on retrieved abstracts)
 - **Qualitative candidate quality** (biomedical plausibility + evidence grounding)
 - **Hallucination proxy**: fraction of generated claims without matching PMID evidence in context
+
+## Metrics implemented for this stage
+
+Retrieval metrics:
+
+- `Precision@k`
+- `Recall@k`
+- `nDCG@k`
+
+Generation/grounding metrics:
+
+- Groundedness / Faithfulness (token support proxy)
+- `Top-k Accuracy`
+
+Utility scripts:
+
+- [scripts/evaluate_mvp.py](scripts/evaluate_mvp.py)
+- [scripts/plot_metrics.py](scripts/plot_metrics.py)
+- [data/metrics_template.json](data/metrics_template.json)
+
+Example evaluation run:
+
+```bash
+python scripts/evaluate_mvp.py --predictions outputs/preds.jsonl --qrels data/qrels.json --gold-drugs data/gold_drugs.json
+```
+
+Example plotting run:
+
+```bash
+python scripts/plot_metrics.py --metrics data/metrics_template.json --outdir plots
+```
+
+## Presentation plots covered
+
+- Precision@k vs k
+- nDCG@k
+- Top-k Accuracy
+- Groundedness histogram
+- Ablation chart: Without RAG vs With RAG
+
+## Literature benchmark ranges (for framing)
+
+- Retrieval: `Precision@5 ≈ 0.6–0.8`, `nDCG@10 ≈ 0.65–0.85`
+- Repurposing ranking: `Hit@10 ≈ 0.5–0.7`, `MRR ≈ 0.3–0.5`
+- LLM groundedness with RAG: typically `60–80%` and lower without RAG
 
 ## Datasets you may need (download links)
 

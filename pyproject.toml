@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Drugenix MVP: Retrieval + Reasoning pipeline for drug repurposing"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+	"matplotlib>=3.9.0",
+]
 
 [project.scripts]
 drugenix = "main:main"
