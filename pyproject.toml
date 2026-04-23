@@ -1,7 +1,10 @@
 [project]
 name = "major-project"
 version = "0.1.0"
-description = "Add your description here"
+description = "Drugenix MVP: Retrieval + Reasoning pipeline for drug repurposing"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
+
+[project.scripts]
+drugenix = "main:main"
