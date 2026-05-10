@@ -12,7 +12,7 @@ from drugenix.pipeline import run_pipeline
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="drugenix",
-        description="Drugenix MVP: PubMed retrieval + LLM/heuristic reasoning for drug repurposing.",
+        description="Drugenix: PubMed retrieval + LLM reasoning + Validation Agent for drug repurposing.",
     )
     parser.add_argument(
         "disease_query",
@@ -41,7 +41,7 @@ def _build_parser() -> argparse.ArgumentParser:
         "--provider",
         type=str,
         default="",
-        help="LLM provider: openai | gemini | ollama | custom(openai-compatible).",
+        help="LLM provider: openai | gemini | ollama | custom (openai-compatible).",
     )
     parser.add_argument(
         "--model",
@@ -61,13 +61,29 @@ def _build_parser() -> argparse.ArgumentParser:
         default="",
         help="Optional API key override for selected provider.",
     )
+    parser.add_argument(
+        "--no-validation",
+        action="store_true",
+        default=False,
+        help="Skip the Validation Agent and show raw reasoning output only.",
+    )
     return parser
+
+
+def _print_section(title: str, char: str = "=") -> None:
+    width = 60
+    print(f"\n{char * width}")
+    print(f"  {title}")
+    print(f"{char * width}")
 
 
 def main() -> None:
     parser = _build_parser()
     args = parser.parse_args()
 
+    # ------------------------------------------------------------------
+    # Configure LLM provider from CLI flags
+    # ------------------------------------------------------------------
     if args.provider:
         provider = args.provider.strip().lower()
         os.environ["LLM_PROVIDER"] = provider
@@ -101,37 +117,86 @@ def main() -> None:
             if args.base_url:
                 os.environ["LLM_BASE_URL"] = args.base_url
 
+    # ------------------------------------------------------------------
+    # Run the full pipeline
+    # ------------------------------------------------------------------
     result = run_pipeline(
         disease_query=args.disease_query,
         retmax=args.retmax,
         top_k=args.top_k,
     )
 
-    print(f"\n=== Drugenix MVP Report: {args.disease_query} ===")
-    print(f"Retrieved abstracts: {len(result['retrieved'])}")
-    print(f"Candidate drugs: {len(result['candidates'])}\n")
+    # ------------------------------------------------------------------
+    # Stage 1 + 2 output: Retrieval & Reasoning candidates
+    # ------------------------------------------------------------------
+    _print_section(f"Drugenix Report: {args.disease_query}")
+    print(f"  Retrieved abstracts : {len(result['retrieved'])}")
+    print(f"  Candidate drugs     : {len(result['candidates'])}")
 
+    print("\n--- Reasoning Candidates (pre-validation) ---")
     for i, candidate in enumerate(result["candidates"], start=1):
         name = candidate.get("drug", "Unknown")
         confidence = candidate.get("confidence", 0.0)
         mechanism = candidate.get("mechanism", "")
         pmids = ", ".join(candidate.get("evidence_pmids", []))
-        print(f"{i}. {name}  (confidence={confidence:.2f})")
+        print(f"  {i}. {name}  (confidence={confidence:.2f})")
         if mechanism:
-            print(f"   mechanism: {mechanism}")
+            mech_display = mechanism[:120] + "..." if len(mechanism) > 120 else mechanism
+            print(f"     mechanism: {mech_display}")
         if pmids:
-            print(f"   evidence PMIDs: {pmids}")
-        print()
+            print(f"     evidence PMIDs: {pmids}")
 
+    # ------------------------------------------------------------------
+    # Stage 3 output: Validation Agent results
+    # ------------------------------------------------------------------
+    if not args.no_validation and result.get("validation"):
+        val = result["validation"]
+        stats = val.get("stats", {})
+        val_results = val.get("results", [])
+
+        _print_section("Validation Agent Report", char="-")
+        print(f"  Total validated : {stats.get('total', 0)}")
+        print(f"  [PASS]          : {stats.get('passed', 0)}")
+        print(f"  [WARN]          : {stats.get('warned', 0)}")
+        print(f"  [FAIL]          : {stats.get('failed', 0)}")
+        print(f"  Pass rate       : {stats.get('pass_rate', 0.0):.0%}")
+        print(f"  Avg confidence  : {stats.get('avg_original_confidence', 0.0):.2f}"
+              f" -> {stats.get('avg_adjusted_confidence', 0.0):.2f} (after validation)")
+
+        top_flags = stats.get("top_safety_flags", [])
+        if top_flags:
+            print(f"  Safety flags    : {', '.join(top_flags)}")
+
+        print("\n--- Validated Candidates ---")
+        for r in val_results:
+            # Strip emoji for Windows cp1252 terminal compatibility
+            summary = r['summary'].replace("\u2705", "[PASS]").replace("\u26a0\ufe0f", "[WARN]").replace("\u274c", "[FAIL]")
+            print(f"\n  {summary}")
+            if r["warnings"]:
+                for w in r["warnings"]:
+                    print(f"    * {w}")
+
+        passed = [r for r in val_results if r["status"] == "PASS"]
+        if passed:
+            _print_section("Recommended Drugs (PASS only)", char="-")
+            for i, r in enumerate(passed, start=1):
+                print(
+                    f"  {i}. {r['drug']}  "
+                    f"(adjusted confidence={r['adjusted_confidence']:.2f})"
+                )
+
+    # ------------------------------------------------------------------
+    # Save JSON
+    # ------------------------------------------------------------------
     if args.save_json:
         output_path = Path(args.save_json)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
-        print(f"Saved detailed JSON to: {output_path}")
+        print(f"\n  Saved detailed JSON to: {output_path}")
 
     if not result["candidates"]:
         print(
-            "No candidate was generated. Try increasing --retmax/--top-k or using a broader disease query.",
+            "\nNo candidates generated. Try increasing --retmax / --top-k or using a broader query.",
             file=sys.stderr,
         )
 

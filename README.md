@@ -1,28 +1,36 @@
 # Drugenix
 
-MVP implementation of your **Retrieval + Reasoning (RAG-based)** stage for drug repurposing.
+**RAG-based Drug Repurposing AI** — three-stage agentic pipeline.
 
-Given a disease query, this prototype:
-1. retrieves relevant PubMed evidence,
-2. reranks top abstracts,
-3. generates candidate drugs with mechanism explanations and PMID-backed evidence.
+Given a disease query, this system:
+1. **Retrieves** relevant PubMed evidence (Retrieval Agent),
+2. **Reasons** over abstracts to generate candidate drugs with mechanism explanations and PMID-backed evidence (Reasoning Agent),
+3. **Validates** each candidate for name plausibility, evidence grounding, and safety signals (Validation Agent).
 
-## What is implemented now (your point #2)
+## What is implemented
 
-- **Retrieval module**: PubMed search + abstract fetch using NCBI E-Utilities.
-- **Reasoning module**:
-  - primary mode: LLM-based reasoning (if `OPENAI_API_KEY` is set),
+- **Retrieval Agent** (`drugenix/retrieval.py`): PubMed search + abstract fetch + reranking via NCBI E-Utilities.
+- **Reasoning Agent** (`drugenix/reasoning.py`):
+  - primary mode: LLM-based reasoning (OpenAI / Gemini / Ollama),
   - fallback mode: deterministic heuristic extraction from abstracts.
-- **Pipeline orchestration**: end-to-end query -> candidates.
-- **CLI**: run from terminal and optionally save JSON output.
+- **Validation Agent** (`drugenix/validation.py`) — *newly added*:
+  - Name plausibility check against WHO INN drug suffixes + known drug list + stopword filter.
+  - Evidence grounding check (PMID count → weak / moderate / strong).
+  - Safety keyword scan (toxicity, adverse effects, contraindications, etc.).
+  - Confidence threshold gate (auto-FAIL below minimum).
+  - Near-duplicate drug name deduplication.
+  - Outputs `PASS`, `WARN`, or `FAIL` with adjusted confidence for each candidate.
+- **Pipeline orchestration** (`drugenix/pipeline.py`): end-to-end query → candidates → validated results.
+- **CLI** (`main.py`): run from terminal, view structured report, optionally save JSON.
 
 ## Project structure
 
-- [main.py](main.py) - CLI entrypoint
-- [drugenix/pipeline.py](drugenix/pipeline.py) - orchestration
-- [drugenix/retrieval.py](drugenix/retrieval.py) - PubMed retrieval + reranking
-- [drugenix/reasoning.py](drugenix/reasoning.py) - LLM/heuristic candidate generation
-- [drugenix/models.py](drugenix/models.py) - shared dataclasses
+- [main.py](main.py) — CLI entrypoint
+- [drugenix/pipeline.py](drugenix/pipeline.py) — orchestration (Retrieval → Reasoning → Validation)
+- [drugenix/retrieval.py](drugenix/retrieval.py) — PubMed retrieval + reranking
+- [drugenix/reasoning.py](drugenix/reasoning.py) — LLM/heuristic candidate generation
+- [drugenix/validation.py](drugenix/validation.py) — **Validation Agent** *(new)*
+- [drugenix/models.py](drugenix/models.py) — shared dataclasses (EvidenceDoc, DrugCandidate, ValidationResult)
 
 ## Run
 
@@ -86,6 +94,23 @@ The JSON contains:
 - `query`
 - `retrieved`: list of PubMed docs (`pmid`, `title`, `abstract`, `journal`, `year`, `retrieval_score`)
 - `candidates`: list of candidate drugs (`drug`, `mechanism`, `confidence`, `evidence_pmids`)
+- `validation`:
+  - `results`: list of validated candidates (`drug`, `status`, `confidence`, `adjusted_confidence`, `checks`, `warnings`, `summary`)
+  - `stats`: aggregate stats (`total`, `passed`, `warned`, `failed`, `pass_rate`, `avg_original_confidence`, `avg_adjusted_confidence`, `top_safety_flags`)
+
+### Validation status values
+
+| Status | Meaning |
+|--------|---------|
+| `PASS` | All checks passed; confidence maintained or boosted |
+| `WARN` | Minor concern (thin evidence or safety flag); confidence penalised |
+| `FAIL` | Critical issue (implausible name, no evidence, or very low confidence); rejected |
+
+### CLI flag: skip validation
+
+```bash
+python main.py "Alzheimer disease" --no-validation
+```
 
 ## Temporary MVP evaluation (aligned with your point #3)
 
