@@ -179,7 +179,7 @@ export default function KnowledgeGraphPage() {
           <ForceGraph2D
             ref={fgRef}
             graphData={graphData}
-            backgroundColor="#161d2e"
+            backgroundColor="#f0f4f8"
             nodeLabel={(n) => `${n.label} (${n.type})`}
             nodeColor={(n) => TYPE_COLORS[n.type] || "#9aa5bd"}
             nodeVal={(n) => n.val}
@@ -198,7 +198,7 @@ export default function KnowledgeGraphPage() {
               const textWidth = ctx.measureText(label).width;
               ctx.font = `${node.type === "disease" ? "bold " : ""}${fontSize}px Inter, sans-serif`;
               // Background pill for readability
-              ctx.fillStyle = "rgba(22, 29, 46, 0.82)";
+              ctx.fillStyle = "rgba(240, 244, 248, 0.88)";
               ctx.beginPath();
               ctx.roundRect(
                 node.x - textWidth / 2 - padding,
@@ -208,7 +208,7 @@ export default function KnowledgeGraphPage() {
                 2 / globalScale
               );
               ctx.fill();
-              ctx.fillStyle = node.type === "disease" ? "#f5b84e" : node.type === "target" ? "#34c77b" : "#c8d0e0";
+              ctx.fillStyle = node.type === "disease" ? "#b45309" : node.type === "target" ? "#15803d" : "#334155";
               ctx.textAlign = "center";
               ctx.fillText(label, node.x, node.y + 10 / globalScale);
             }}

@@ -15,10 +15,12 @@ import LoadingState from "../components/LoadingState.jsx";
 const Ks = [1, 3, 5, 10];
 
 const tooltipStyle = {
-  background: "#161d2e",
-  border: "1px solid #232c42",
+  background: "#ffffff",
+  border: "1px solid #e2e8f0",
   borderRadius: 8,
   fontSize: 12.5,
+  color: "#0f172a",
+  boxShadow: "0 4px 16px rgba(15,23,42,0.08)",
 };
 
 const VARIANT_LABELS = {
@@ -44,7 +46,7 @@ const CASE_STUDIES = [
     mechanism: "AMPK activation → mTOR inhibition → reduced cancer cell proliferation",
     evidence: "50+ RCTs and observational studies; meta-analyses show 30% cancer risk reduction",
     status: "Phase III trials ongoing",
-    color: "#4f8cff",
+    color: "#2563eb",
   },
   {
     id: "thalidomide_myeloma",
@@ -240,9 +242,9 @@ function ComparativeSection({ data }) {
         <div className="card-title">Hit@k — Does a gold-standard drug appear in top-k results?</div>
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={groupedHit} barCategoryGap="25%">
-            <CartesianGrid strokeDasharray="3 3" stroke="#232c42" />
-            <XAxis dataKey="k" stroke="#9aa5bd" fontSize={12} />
-            <YAxis domain={[0, 1]} stroke="#9aa5bd" fontSize={12} tickFormatter={(v) => `${(v * 100).toFixed(0)}%`} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+            <XAxis dataKey="k" stroke="#64748b" fontSize={12} />
+            <YAxis domain={[0, 1]} stroke="#64748b" fontSize={12} tickFormatter={(v) => `${(v * 100).toFixed(0)}%`} />
             <Tooltip contentStyle={tooltipStyle} formatter={(v) => `${(v * 100).toFixed(1)}%`} />
             <Legend wrapperStyle={{ fontSize: 12.5 }} />
             <Bar dataKey="Pure LLM" fill={VARIANT_COLORS.pure_llm} radius={[4, 4, 0, 0]} />
@@ -256,8 +258,8 @@ function ComparativeSection({ data }) {
       <div className="grid grid-2" style={{ marginBottom: 16 }}>
         <ChartCard title="Multi-metric Radar — All Variants" height={280}>
           <RadarChart data={radarData}>
-            <PolarGrid stroke="#232c42" />
-            <PolarAngleAxis dataKey="metric" tick={{ fill: "#9aa5bd", fontSize: 11 }} />
+            <PolarGrid stroke="#e2e8f0" />
+            <PolarAngleAxis dataKey="metric" tick={{ fill: "#64748b", fontSize: 11 }} />
             {MAIN_VARIANTS.map((v) => (
               <Radar
                 key={v}
@@ -707,9 +709,9 @@ export default function MetricsPage() {
               <div className="grid grid-2" style={{ marginBottom: 20 }}>
                 <ChartCard title="Precision@k (Hybrid Pipeline)">
                   <BarChart data={precisionData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#232c42" />
-                    <XAxis dataKey="k" stroke="#9aa5bd" fontSize={12} />
-                    <YAxis domain={[0, 1]} stroke="#9aa5bd" fontSize={12} tickFormatter={(v) => `${(v * 100).toFixed(0)}%`} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <XAxis dataKey="k" stroke="#64748b" fontSize={12} />
+                    <YAxis domain={[0, 1]} stroke="#64748b" fontSize={12} tickFormatter={(v) => `${(v * 100).toFixed(0)}%`} />
                     <Tooltip contentStyle={tooltipStyle} formatter={(v) => `${(v * 100).toFixed(1)}%`} />
                     <Bar dataKey="value" fill="#4f8cff" radius={[4, 4, 0, 0]} />
                   </BarChart>
@@ -717,9 +719,9 @@ export default function MetricsPage() {
 
                 <ChartCard title="Hit@k Accuracy (Hybrid Pipeline)">
                   <BarChart data={topKData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#232c42" />
-                    <XAxis dataKey="k" stroke="#9aa5bd" fontSize={12} />
-                    <YAxis domain={[0, 1]} stroke="#9aa5bd" fontSize={12} tickFormatter={(v) => `${(v * 100).toFixed(0)}%`} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <XAxis dataKey="k" stroke="#64748b" fontSize={12} />
+                    <YAxis domain={[0, 1]} stroke="#64748b" fontSize={12} tickFormatter={(v) => `${(v * 100).toFixed(0)}%`} />
                     <Tooltip contentStyle={tooltipStyle} formatter={(v) => `${(v * 100).toFixed(1)}%`} />
                     <Bar dataKey="value" fill="#f5b84e" radius={[4, 4, 0, 0]} />
                   </BarChart>
@@ -727,9 +729,9 @@ export default function MetricsPage() {
 
                 <ChartCard title="RAG Ablation — Without vs With Evidence Retrieval">
                   <BarChart data={ablationData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#232c42" />
-                    <XAxis dataKey="name" stroke="#9aa5bd" fontSize={12} />
-                    <YAxis domain={[0, 1]} stroke="#9aa5bd" fontSize={12} tickFormatter={(v) => `${(v * 100).toFixed(0)}%`} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <XAxis dataKey="name" stroke="#64748b" fontSize={12} />
+                    <YAxis domain={[0, 1]} stroke="#64748b" fontSize={12} tickFormatter={(v) => `${(v * 100).toFixed(0)}%`} />
                     <Tooltip contentStyle={tooltipStyle} formatter={(v) => `${(v * 100).toFixed(1)}%`} />
                     <Legend />
                     <Bar dataKey="correctness" name="Hit@5 Accuracy" fill="#4f8cff" radius={[4, 4, 0, 0]} />
