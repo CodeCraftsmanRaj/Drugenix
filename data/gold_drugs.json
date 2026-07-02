@@ -1,0 +1,77 @@
+{
+  "Alzheimer disease": {
+    "approved": ["Donepezil", "Memantine", "Rivastigmine", "Galantamine"],
+    "repurposed": ["Rapamycin", "Metformin", "Liraglutide", "Nilotinib", "Saracatinib"],
+    "notes": "AChE inhibitors approved; mTOR/AMPK pathways under investigation for repurposing"
+  },
+  "Type 2 diabetes": {
+    "approved": ["Metformin", "Empagliflozin", "Sitagliptin", "Liraglutide", "Dapagliflozin", "Pioglitazone"],
+    "repurposed": ["Rapamycin", "Berberine", "Hydroxychloroquine"],
+    "notes": "SGLT2 inhibitors and GLP-1 agonists are recent approvals with repurposing potential"
+  },
+  "Parkinson disease": {
+    "approved": ["Levodopa", "Carbidopa", "Pramipexole", "Ropinirole", "Rasagiline", "Safinamide"],
+    "repurposed": ["Nilotinib", "Ambroxol", "Deferiprone", "Exenatide", "Isradipine"],
+    "notes": "Nilotinib (CML drug) and GLP-1 agonists actively investigated for PD neuroprotection"
+  },
+  "Breast cancer": {
+    "approved": ["Tamoxifen", "Trastuzumab", "Letrozole", "Palbociclib", "Olaparib", "Fulvestrant", "Pertuzumab"],
+    "repurposed": ["Metformin", "Aspirin", "Propranolol", "Itraconazole", "Digoxin"],
+    "notes": "ER+ and HER2+ targeted therapies; metformin and aspirin in multiple clinical trials"
+  },
+  "Lung cancer": {
+    "approved": ["Erlotinib", "Gefitinib", "Crizotinib", "Pembrolizumab", "Bevacizumab", "Osimertinib", "Alectinib"],
+    "repurposed": ["Metformin", "Itraconazole", "Rapamycin", "Doxycycline", "Celecoxib"],
+    "notes": "EGFR and ALK inhibitors; immunotherapy now standard; repurposing targets angiogenesis and mTOR"
+  },
+  "COVID-19": {
+    "approved": ["Remdesivir", "Nirmatrelvir", "Molnupiravir", "Dexamethasone", "Baricitinib", "Tocilizumab"],
+    "repurposed": ["Fluvoxamine", "Ivermectin", "Famotidine", "Colchicine", "Hydroxychloroquine"],
+    "notes": "Dexamethasone was a rapid repurposing success; IL-6 pathway drugs baricitinib/tocilizumab approved"
+  },
+  "Rheumatoid arthritis": {
+    "approved": ["Methotrexate", "Adalimumab", "Tofacitinib", "Baricitinib", "Abatacept", "Rituximab", "Tocilizumab"],
+    "repurposed": ["Hydroxychloroquine", "Sulfasalazine", "Leflunomide"],
+    "notes": "TNF and JAK inhibitors are mainstays; HCQ repurposed from antimalarial"
+  },
+  "Depression": {
+    "approved": ["Fluoxetine", "Sertraline", "Escitalopram", "Venlafaxine", "Bupropion", "Mirtazapine", "Duloxetine"],
+    "repurposed": ["Ketamine", "Rapamycin", "Minocycline", "Celecoxib", "Psilocybin"],
+    "notes": "Ketamine (anesthetic) rapidly approved as esketamine for TRD — landmark repurposing success"
+  },
+  "Hypertension": {
+    "approved": ["Losartan", "Lisinopril", "Amlodipine", "Metoprolol", "Hydrochlorothiazide", "Carvedilol"],
+    "repurposed": ["Spironolactone", "Minoxidil", "Sildenafil"],
+    "notes": "Minoxidil repurposed from antihypertensive to hair loss; sildenafil from hypertension to ED"
+  },
+  "Asthma": {
+    "approved": ["Montelukast", "Salbutamol", "Fluticasone", "Budesonide", "Salmeterol", "Tiotropium", "Omalizumab"],
+    "repurposed": ["Mepolizumab", "Azithromycin", "Theophylline"],
+    "notes": "IL-5 pathway biologic mepolizumab repurposed from eosinophilic conditions"
+  },
+  "Influenza": {
+    "approved": ["Oseltamivir", "Zanamivir", "Baloxavir", "Peramivir"],
+    "repurposed": ["Favipiravir", "Nitazoxanide", "Celecoxib", "Statins"],
+    "notes": "Favipiravir (originally for RNA viruses) repurposed for influenza and COVID-19"
+  },
+  "HIV infection": {
+    "approved": ["Tenofovir", "Dolutegravir", "Lopinavir", "Ritonavir", "Emtricitabine", "Efavirenz"],
+    "repurposed": ["Hydroxychloroquine", "Aspirin"],
+    "notes": "Combination ART remains standard; NRTI/NNRTI/PI classes well established"
+  },
+  "Multiple myeloma": {
+    "approved": ["Bortezomib", "Thalidomide", "Lenalidomide", "Daratumumab", "Carfilzomib", "Pomalidomide"],
+    "repurposed": ["Metformin", "Rapamycin", "Atorvastatin", "Itraconazole"],
+    "notes": "Thalidomide is the canonical drug repurposing story — from sedative to myeloma drug"
+  },
+  "Colorectal cancer": {
+    "approved": ["Oxaliplatin", "Bevacizumab", "Cetuximab", "Pembrolizumab", "Fluorouracil"],
+    "repurposed": ["Aspirin", "Metformin", "Celecoxib", "Statins", "Itraconazole"],
+    "notes": "Aspirin has strong epidemiological evidence for CRC prevention — classic repurposing candidate"
+  },
+  "Chronic obstructive pulmonary disease": {
+    "approved": ["Tiotropium", "Salmeterol", "Fluticasone", "Roflumilast", "Indacaterol"],
+    "repurposed": ["Azithromycin", "Statins", "Metformin", "Theophylline"],
+    "notes": "Azithromycin repurposed from antibiotic to COPD maintenance therapy (anti-inflammatory)"
+  }
+}

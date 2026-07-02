@@ -1,0 +1,411 @@
+INFO:     Will watch for changes in these directories: ['C:\\Users\\Rasika Mane\\Documents\\Drugenix-main\\Drugenix-main']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [18100] using WatchFiles
+INFO:     Started server process [13080]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:61911 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61913 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61915 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58091 - "OPTIONS /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50220 - "OPTIONS /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56092 - "OPTIONS /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "OPTIONS /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58091 - "OPTIONS /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56092 - "OPTIONS /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64325 - "OPTIONS /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64851 - "OPTIONS /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58091 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50220 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64851 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58091 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56092 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64325 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "OPTIONS /api/link-prediction/alzheimer%20disease?top_k=5 HTTP/1.1" 200 OK
+INFO:drugenix.kg_embeddings:Loaded TransE model (1652 entities)
+INFO:     127.0.0.1:51201 - "GET /api/link-prediction/alzheimer%20disease?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "OPTIONS /api/link-prediction/type%202%20diabetes?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "GET /api/link-prediction/type%202%20diabetes?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "OPTIONS /api/link-prediction/breast%20cancer?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "GET /api/link-prediction/breast%20cancer?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "OPTIONS /api/link-prediction/rheumatoid%20arthritis?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "GET /api/link-prediction/rheumatoid%20arthritis?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59414 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60050 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51793 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54924 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50303 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55554 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59414 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60050 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51793 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54924 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54924 - "GET /api/link-prediction/alzheimer%20disease?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54924 - "GET /api/link-prediction/type%202%20diabetes?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54924 - "GET /api/link-prediction/breast%20cancer?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54924 - "GET /api/link-prediction/rheumatoid%20arthritis?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56078 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61416 - "OPTIONS /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61416 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61416 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62395 - "OPTIONS /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61146 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:drugenix.knowledge_graph:Loaded 2161 ChEMBL drug-disease pairs from chembl_kg.json
+INFO:drugenix.knowledge_graph:Knowledge graph built: 1652 nodes, 2306 edges
+INFO:     127.0.0.1:61146 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62395 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62395 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61146 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63070 - "OPTIONS /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53386 - "OPTIONS /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63070 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63070 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53386 - "OPTIONS /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62842 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62842 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63070 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62842 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63070 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56378 - "OPTIONS /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56378 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56378 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56903 - "OPTIONS /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57681 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57681 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56378 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57681 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56378 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63369 - "OPTIONS /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55352 - "OPTIONS /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55352 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63369 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63369 - "OPTIONS /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55352 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55352 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63369 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55352 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63369 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49680 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63782 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63782 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49680 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63782 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49680 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49716 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55723 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55723 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49716 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49716 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55723 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59629 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64829 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59629 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64829 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59629 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64829 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58422 - "OPTIONS /api/query HTTP/1.1" 200 OK
+INFO:drugenix.semantic_retrieval:Loading embedding model: all-MiniLM-L6-v2
+INFO:sentence_transformers.base.model:No device provided, using cpu
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+INFO:sentence_transformers.base.model:Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:     127.0.0.1:62141 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62942 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53221 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62141 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53221 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62141 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|##########| 103/103 [00:00<00:00, 2704.21it/s]
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+INFO:drugenix.semantic_retrieval:Stored 8 documents in ChromaDB (collection=drugenix_pubmed_459ec420e872)
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/d4data/biomedical-ner-all/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/d4data/biomedical-ner-all/015a4050c9ac99722e61c547aa9b4282bcbedc7f/config.json "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/102 [00:00<?, ?it/s]Loading weights: 100%|##########| 102/102 [00:00<00:00, 3015.85it/s]
+INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/d4data/biomedical-ner-all/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/d4data/biomedical-ner-all/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/d4data/biomedical-ner-all/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/d4data/biomedical-ner-all/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+INFO:httpx:HTTP Request: HEAD https://huggingface.co/d4data/biomedical-ner-all/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+INFO:drugenix.ner_extraction:Loaded HuggingFace biomedical NER: d4data/biomedical-ner-all
+INFO:     127.0.0.1:53254 - "OPTIONS /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49766 - "OPTIONS /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "OPTIONS /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "OPTIONS /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49766 - "OPTIONS /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "OPTIONS /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50259 - "OPTIONS /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49766 - "OPTIONS /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53254 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "OPTIONS /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50259 - "OPTIONS /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61986 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53254 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49766 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61986 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50259 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53254 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "OPTIONS /api/link-prediction/alzheimer%20disease?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "GET /api/link-prediction/alzheimer%20disease?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "OPTIONS /api/link-prediction/type%202%20diabetes?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "GET /api/link-prediction/type%202%20diabetes?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "OPTIONS /api/link-prediction/breast%20cancer?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "GET /api/link-prediction/breast%20cancer?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "OPTIONS /api/link-prediction/rheumatoid%20arthritis?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58497 - "GET /api/link-prediction/rheumatoid%20arthritis?top_k=5 HTTP/1.1" 200 OK
+INFO:drugenix.aggregation:Aggregation complete: 4 recommended, 4 review, 0 rejected
+INFO:     127.0.0.1:58422 - "POST /api/query HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58422 - "OPTIONS /api/history/3e17f3e4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60402 - "OPTIONS /api/history/3e17f3e4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58422 - "GET /api/history/3e17f3e4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60402 - "GET /api/history/3e17f3e4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57651 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55595 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55595 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57651 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50523 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55595 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57443 - "OPTIONS /api/knowledge-graph/COVID-19?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57443 - "GET /api/knowledge-graph/COVID-19?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52334 - "GET /api/knowledge-graph/COVID-19?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52334 - "OPTIONS /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63579 - "OPTIONS /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51304 - "OPTIONS /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55923 - "OPTIONS /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53605 - "OPTIONS /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52334 - "OPTIONS /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60778 - "OPTIONS /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53605 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52334 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51304 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60778 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55923 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63579 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60778 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51304 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52334 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53605 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53605 - "OPTIONS /api/link-prediction/alzheimer%20disease?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53605 - "GET /api/link-prediction/alzheimer%20disease?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53605 - "OPTIONS /api/link-prediction/type%202%20diabetes?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53605 - "GET /api/link-prediction/type%202%20diabetes?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53605 - "OPTIONS /api/link-prediction/breast%20cancer?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53605 - "GET /api/link-prediction/breast%20cancer?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53605 - "OPTIONS /api/link-prediction/rheumatoid%20arthritis?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53605 - "GET /api/link-prediction/rheumatoid%20arthritis?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51879 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51879 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61891 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51879 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51879 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61891 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61344 - "GET /api/history/3e17f3e4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61344 - "GET /api/history/3e17f3e4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61344 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61344 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61330 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59521 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61330 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59521 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:drugenix.semantic_retrieval:Stored 8 documents in ChromaDB (collection=drugenix_pubmed_0c8afcb5887a)
+INFO:drugenix.aggregation:Aggregation complete: 4 recommended, 3 review, 0 rejected
+INFO:     127.0.0.1:56130 - "POST /api/query HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56130 - "OPTIONS /api/history/7bbc69c2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53295 - "OPTIONS /api/history/7bbc69c2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53295 - "GET /api/history/7bbc69c2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56130 - "GET /api/history/7bbc69c2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58896 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55504 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61229 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62349 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62349 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61229 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62349 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55504 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55504 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56741 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63754 - "OPTIONS /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57093 - "OPTIONS /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52326 - "OPTIONS /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58145 - "OPTIONS /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63754 - "OPTIONS /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60407 - "OPTIONS /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "OPTIONS /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52326 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63754 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58145 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52326 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63754 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58145 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "OPTIONS /api/link-prediction/alzheimer%20disease?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60407 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58145 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "GET /api/link-prediction/alzheimer%20disease?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "OPTIONS /api/link-prediction/type%202%20diabetes?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "GET /api/link-prediction/type%202%20diabetes?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "OPTIONS /api/link-prediction/breast%20cancer?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "GET /api/link-prediction/breast%20cancer?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "OPTIONS /api/link-prediction/rheumatoid%20arthritis?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "GET /api/link-prediction/rheumatoid%20arthritis?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63047 - "OPTIONS /api/history?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63047 - "GET /api/history?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63047 - "GET /api/history?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63047 - "OPTIONS /api/history/7bbc69c2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56161 - "OPTIONS /api/history/7bbc69c2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56161 - "GET /api/history/7bbc69c2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63047 - "GET /api/history/7bbc69c2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51418 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58599 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51418 - "GET /api/metrics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52421 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55566 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62644 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52421 - "GET /api/link-prediction-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54286 - "GET /api/comparative-evaluation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62644 - "GET /api/case-studies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55566 - "GET /api/predict-benchmark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55566 - "GET /api/link-prediction/alzheimer%20disease?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55566 - "GET /api/link-prediction/type%202%20diabetes?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55566 - "GET /api/link-prediction/breast%20cancer?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55566 - "GET /api/link-prediction/rheumatoid%20arthritis?top_k=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60592 - "GET /api/history?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60592 - "GET /api/history?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60592 - "GET /api/history/7bbc69c2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54412 - "GET /api/history/7bbc69c2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62868 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62868 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60027 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60735 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49216 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60735 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60027 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49216 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52514 - "OPTIONS /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63209 - "OPTIONS /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63209 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63209 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52514 - "OPTIONS /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52279 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63209 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52279 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63209 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59659 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54855 - "GET /api/history?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54855 - "GET /api/history?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49505 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54855 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49505 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54855 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54855 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59319 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53429 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59319 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55824 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53040 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55728 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64529 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64529 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61190 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65446 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61190 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65446 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61190 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61190 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64155 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63231 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56243 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56349 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64155 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63231 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56243 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57398 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58471 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57398 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59708 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55108 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54693 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54693 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61554 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62917 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53927 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64394 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51719 - "OPTIONS /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51719 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51719 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55031 - "OPTIONS /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49408 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51719 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49408 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49408 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51719 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61554 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62917 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61554 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59899 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54623 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54364 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52149 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54623 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54623 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52149 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54623 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54364 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63800 - "OPTIONS /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51944 - "OPTIONS /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51944 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63800 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63800 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51944 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51944 - "GET /api/knowledge-graph/Alzheimer%20disease?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57491 - "OPTIONS /api/knowledge-graph/COVID-19?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57491 - "GET /api/knowledge-graph/COVID-19?max_hops=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58637 - "OPTIONS /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54060 - "OPTIONS /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58637 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58637 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58637 - "OPTIONS /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54060 - "OPTIONS /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58637 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54060 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58637 - "GET /api/knowledge-graph/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54060 - "GET /api/history?limit=8 HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'drugenix\admet.py'. Reloading...

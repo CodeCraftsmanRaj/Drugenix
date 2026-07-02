@@ -1,0 +1,23 @@
+{
+  "retrieval": {
+    "P@1": 0.2,
+    "P@3": 0.111,
+    "P@5": 0.093,
+    "P@10": 0.058
+  },
+  "generation": {
+    "mean_groundedness": 0.542,
+    "Top-1 Accuracy": 0.2,
+    "Top-3 Accuracy": 0.2,
+    "Top-5 Accuracy": 0.2,
+    "Top-10 Accuracy": 0.2,
+    "mrr": 0.2,
+    "auroc": 0.582
+  },
+  "ablation": {
+    "without_rag_correctness": 0.067,
+    "without_rag_groundedness": 0.979,
+    "with_rag_correctness": 0.2,
+    "with_rag_groundedness": 0.576
+  }
+}

@@ -1,0 +1,26 @@
+[project]
+name = "drugenix"
+version = "0.2.0"
+description = "Drugenix: Agentic AI System for Accelerated Drug Repurposing"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "matplotlib>=3.9.0",
+    "sentence-transformers>=3.0.0",
+    "chromadb>=0.5.0",
+    "spacy>=3.7.0",
+    "networkx>=3.2",
+    "pandas>=2.1.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "pydantic>=2.0",
+    "requests>=2.31.0",
+    "numpy>=1.26.0",
+]
+
+[project.scripts]
+drugenix = "main:main"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"

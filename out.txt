@@ -1,0 +1,8 @@
+Rapamycin 0.8 ['27260250'] mTOR inhibition, modulating autophagy
+Oestrogen therapy 0.7 ['10965513'] Neurotrophic and neuroprotective effects, influencing neurotransmitters and proteins implicated in Alzheimer's disease pathogenesis
+Monoclonal antibodies to Abeta 0.6 ['18939505'] Passive immunization using monoclonal antibodies to amyloid plaques
+Vorinostat 0.5 [] Histone deacetylase inhibitor, modulating autophagy and protein homeostasis
+Galantamine 0.4 ['34181171'] Cholinesterase inhibition, improving acetylcholine levels
+Memantine 0.3 ['34181171'] NMDA-receptor antagonism, reducing excitotoxicity
+Donepezil 0.2 ['34181171'] Cholinesterase inhibition, improving acetylcholine levels
+Aducanumab 0.1 ['18939505'] Passive immunization using monoclonal antibodies to amyloid plaques

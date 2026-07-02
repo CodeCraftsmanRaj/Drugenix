@@ -1,0 +1,21 @@
+{
+  "model": "TransE",
+  "embedding_dim": 64,
+  "num_epochs": 100,
+  "benchmark_type": "PREDICT-style (ChEMBL Phase 4 FDA-approved)",
+  "min_phase": 4.0,
+  "metrics": {
+    "auroc": 0.883,
+    "hit_at_1": 0.2,
+    "hit_at_5": 0.733,
+    "hit_at_10": 0.933,
+    "n_test_pos": 133,
+    "n_test_neg": 399,
+    "coverage": 1.0
+  },
+  "benchmark_split": {
+    "train_pairs": 528,
+    "test_pos_pairs": 133,
+    "test_neg_pairs": 399
+  }
+}

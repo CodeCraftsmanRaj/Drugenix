@@ -1,0 +1,7 @@
+{
+  "Alzheimer disease": ["Donepezil", "Memantine", "Rivastigmine"],
+  "Type 2 diabetes": ["Metformin", "Empagliflozin", "Sitagliptin"],
+  "Parkinson disease": ["Levodopa", "Carbidopa", "Pramipexole"],
+  "Hypertension": ["Losartan", "Lisinopril", "Amlodipine"],
+  "Asthma": ["Montelukast", "Salbutamol", "Fluticasone"]
+}

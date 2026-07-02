@@ -1,0 +1,258 @@
+No cuda devices were available. The model runs on CPU
+C:\Users\Rasika Mane\AppData\Roaming\Python\Python313\site-packages\torch\utils\data\dataloader.py:752: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+KG loaded: 1652 nodes, 2306 edges
+
+Building PREDICT-style benchmark (ChEMBL Phase 4 = FDA-approved pairs)...
+  Total positives: 661
+  Train set: 528 pairs
+  Test set: 133 pos + 399 neg
+Exporting triples (1652 nodes, 2306 edges)...
+  2306 triples
+Training TransE via PyKEEN (dim=64, epochs=100)...
+Training epochs on cpu:   0%|          | 0/100 [00:00<?, ?epoch/s]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:   0%|          | 0/100 [00:00<?, ?epoch/s, loss=0.849, prev_loss=nan]Training epochs on cpu:   1%|1         | 1/100 [00:00<00:13,  7.14epoch/s, loss=0.849, prev_loss=nan]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:   1%|1         | 1/100 [00:00<00:13,  7.14epoch/s, loss=0.458, prev_loss=0.849]Training epochs on cpu:   2%|2         | 2/100 [00:00<00:12,  7.72epoch/s, loss=0.458, prev_loss=0.849]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:   2%|2         | 2/100 [00:00<00:12,  7.72epoch/s, loss=0.344, prev_loss=0.458]Training epochs on cpu:   3%|3         | 3/100 [00:00<00:12,  8.00epoch/s, loss=0.344, prev_loss=0.458]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:   3%|3         | 3/100 [00:00<00:12,  8.00epoch/s, loss=0.29, prev_loss=0.344] Training epochs on cpu:   4%|4         | 4/100 [00:00<00:12,  7.93epoch/s, loss=0.29, prev_loss=0.344]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:   4%|4         | 4/100 [00:00<00:12,  7.93epoch/s, loss=0.227, prev_loss=0.29]Training epochs on cpu:   5%|5         | 5/100 [00:00<00:11,  8.03epoch/s, loss=0.227, prev_loss=0.29]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:   5%|5         | 5/100 [00:00<00:11,  8.03epoch/s, loss=0.204, prev_loss=0.227]Training epochs on cpu:   6%|6         | 6/100 [00:00<00:11,  8.11epoch/s, loss=0.204, prev_loss=0.227]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:   6%|6         | 6/100 [00:00<00:11,  8.11epoch/s, loss=0.155, prev_loss=0.204]Training epochs on cpu:   7%|7         | 7/100 [00:00<00:11,  8.07epoch/s, loss=0.155, prev_loss=0.204]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:   7%|7         | 7/100 [00:01<00:11,  8.07epoch/s, loss=0.145, prev_loss=0.155]Training epochs on cpu:   8%|8         | 8/100 [00:01<00:11,  7.85epoch/s, loss=0.145, prev_loss=0.155]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:   8%|8         | 8/100 [00:01<00:11,  7.85epoch/s, loss=0.138, prev_loss=0.145]Training epochs on cpu:   9%|9         | 9/100 [00:01<00:11,  8.00epoch/s, loss=0.138, prev_loss=0.145]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:   9%|9         | 9/100 [00:01<00:11,  8.00epoch/s, loss=0.0994, prev_loss=0.138]Training epochs on cpu:  10%|#         | 10/100 [00:01<00:11,  8.11epoch/s, loss=0.0994, prev_loss=0.138]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  10%|#         | 10/100 [00:01<00:11,  8.11epoch/s, loss=0.112, prev_loss=0.0994]Training epochs on cpu:  11%|#1        | 11/100 [00:01<00:10,  8.23epoch/s, loss=0.112, prev_loss=0.0994]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  11%|#1        | 11/100 [00:01<00:10,  8.23epoch/s, loss=0.0988, prev_loss=0.112]Training epochs on cpu:  12%|#2        | 12/100 [00:01<00:10,  8.33epoch/s, loss=0.0988, prev_loss=0.112]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  12%|#2        | 12/100 [00:01<00:10,  8.33epoch/s, loss=0.0939, prev_loss=0.0988]Training epochs on cpu:  13%|#3        | 13/100 [00:01<00:10,  8.36epoch/s, loss=0.0939, prev_loss=0.0988]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  13%|#3        | 13/100 [00:01<00:10,  8.36epoch/s, loss=0.0985, prev_loss=0.0939]Training epochs on cpu:  14%|#4        | 14/100 [00:01<00:10,  8.48epoch/s, loss=0.0985, prev_loss=0.0939]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  14%|#4        | 14/100 [00:01<00:10,  8.48epoch/s, loss=0.0841, prev_loss=0.0985]Training epochs on cpu:  15%|#5        | 15/100 [00:01<00:10,  8.45epoch/s, loss=0.0841, prev_loss=0.0985]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  15%|#5        | 15/100 [00:01<00:10,  8.45epoch/s, loss=0.0804, prev_loss=0.0841]Training epochs on cpu:  16%|#6        | 16/100 [00:01<00:09,  8.47epoch/s, loss=0.0804, prev_loss=0.0841]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  16%|#6        | 16/100 [00:02<00:09,  8.47epoch/s, loss=0.0965, prev_loss=0.0804]Training epochs on cpu:  17%|#7        | 17/100 [00:02<00:10,  8.28epoch/s, loss=0.0965, prev_loss=0.0804]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  17%|#7        | 17/100 [00:02<00:10,  8.28epoch/s, loss=0.0797, prev_loss=0.0965]Training epochs on cpu:  18%|#8        | 18/100 [00:02<00:09,  8.34epoch/s, loss=0.0797, prev_loss=0.0965]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  18%|#8        | 18/100 [00:02<00:09,  8.34epoch/s, loss=0.0709, prev_loss=0.0797]Training epochs on cpu:  19%|#9        | 19/100 [00:02<00:09,  8.38epoch/s, loss=0.0709, prev_loss=0.0797]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  19%|#9        | 19/100 [00:02<00:09,  8.38epoch/s, loss=0.0851, prev_loss=0.0709]Training epochs on cpu:  20%|##        | 20/100 [00:02<00:09,  8.44epoch/s, loss=0.0851, prev_loss=0.0709]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  20%|##        | 20/100 [00:02<00:09,  8.44epoch/s, loss=0.0736, prev_loss=0.0851]Training epochs on cpu:  21%|##1       | 21/100 [00:02<00:09,  8.43epoch/s, loss=0.0736, prev_loss=0.0851]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  21%|##1       | 21/100 [00:02<00:09,  8.43epoch/s, loss=0.0664, prev_loss=0.0736]Training epochs on cpu:  22%|##2       | 22/100 [00:02<00:09,  8.33epoch/s, loss=0.0664, prev_loss=0.0736]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  22%|##2       | 22/100 [00:02<00:09,  8.33epoch/s, loss=0.0654, prev_loss=0.0664]Training epochs on cpu:  23%|##3       | 23/100 [00:02<00:09,  8.33epoch/s, loss=0.0654, prev_loss=0.0664]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  23%|##3       | 23/100 [00:02<00:09,  8.33epoch/s, loss=0.0507, prev_loss=0.0654]Training epochs on cpu:  24%|##4       | 24/100 [00:02<00:10,  7.40epoch/s, loss=0.0507, prev_loss=0.0654]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  24%|##4       | 24/100 [00:03<00:10,  7.40epoch/s, loss=0.0802, prev_loss=0.0507]Training epochs on cpu:  25%|##5       | 25/100 [00:03<00:10,  7.30epoch/s, loss=0.0802, prev_loss=0.0507]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  25%|##5       | 25/100 [00:03<00:10,  7.30epoch/s, loss=0.0563, prev_loss=0.0802]Training epochs on cpu:  26%|##6       | 26/100 [00:03<00:10,  7.37epoch/s, loss=0.0563, prev_loss=0.0802]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  26%|##6       | 26/100 [00:03<00:10,  7.37epoch/s, loss=0.0886, prev_loss=0.0563]Training epochs on cpu:  27%|##7       | 27/100 [00:03<00:09,  7.36epoch/s, loss=0.0886, prev_loss=0.0563]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  27%|##7       | 27/100 [00:03<00:09,  7.36epoch/s, loss=0.0856, prev_loss=0.0886]Training epochs on cpu:  28%|##8       | 28/100 [00:03<00:09,  7.29epoch/s, loss=0.0856, prev_loss=0.0886]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  28%|##8       | 28/100 [00:03<00:09,  7.29epoch/s, loss=0.075, prev_loss=0.0856] Training epochs on cpu:  29%|##9       | 29/100 [00:03<00:09,  7.45epoch/s, loss=0.075, prev_loss=0.0856]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  29%|##9       | 29/100 [00:03<00:09,  7.45epoch/s, loss=0.0679, prev_loss=0.075]Training epochs on cpu:  30%|###       | 30/100 [00:03<00:09,  7.58epoch/s, loss=0.0679, prev_loss=0.075]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  30%|###       | 30/100 [00:03<00:09,  7.58epoch/s, loss=0.0663, prev_loss=0.0679]Training epochs on cpu:  31%|###1      | 31/100 [00:03<00:09,  7.46epoch/s, loss=0.0663, prev_loss=0.0679]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  31%|###1      | 31/100 [00:04<00:09,  7.46epoch/s, loss=0.0595, prev_loss=0.0663]Training epochs on cpu:  32%|###2      | 32/100 [00:04<00:09,  7.54epoch/s, loss=0.0595, prev_loss=0.0663]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  32%|###2      | 32/100 [00:04<00:09,  7.54epoch/s, loss=0.0651, prev_loss=0.0595]Training epochs on cpu:  33%|###3      | 33/100 [00:04<00:08,  7.59epoch/s, loss=0.0651, prev_loss=0.0595]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  33%|###3      | 33/100 [00:04<00:08,  7.59epoch/s, loss=0.0785, prev_loss=0.0651]Training epochs on cpu:  34%|###4      | 34/100 [00:04<00:08,  7.63epoch/s, loss=0.0785, prev_loss=0.0651]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  34%|###4      | 34/100 [00:04<00:08,  7.63epoch/s, loss=0.0606, prev_loss=0.0785]Training epochs on cpu:  35%|###5      | 35/100 [00:04<00:08,  7.41epoch/s, loss=0.0606, prev_loss=0.0785]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  35%|###5      | 35/100 [00:04<00:08,  7.41epoch/s, loss=0.0684, prev_loss=0.0606]Training epochs on cpu:  36%|###6      | 36/100 [00:04<00:09,  7.08epoch/s, loss=0.0684, prev_loss=0.0606]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  36%|###6      | 36/100 [00:04<00:09,  7.08epoch/s, loss=0.068, prev_loss=0.0684] Training epochs on cpu:  37%|###7      | 37/100 [00:04<00:09,  6.95epoch/s, loss=0.068, prev_loss=0.0684]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  37%|###7      | 37/100 [00:04<00:09,  6.95epoch/s, loss=0.0582, prev_loss=0.068]Training epochs on cpu:  38%|###8      | 38/100 [00:04<00:08,  7.15epoch/s, loss=0.0582, prev_loss=0.068]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  38%|###8      | 38/100 [00:05<00:08,  7.15epoch/s, loss=0.061, prev_loss=0.0582]Training epochs on cpu:  39%|###9      | 39/100 [00:05<00:08,  7.31epoch/s, loss=0.061, prev_loss=0.0582]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  39%|###9      | 39/100 [00:05<00:08,  7.31epoch/s, loss=0.086, prev_loss=0.061] Training epochs on cpu:  40%|####      | 40/100 [00:05<00:08,  7.40epoch/s, loss=0.086, prev_loss=0.061]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  40%|####      | 40/100 [00:05<00:08,  7.40epoch/s, loss=0.0705, prev_loss=0.086]Training epochs on cpu:  41%|####1     | 41/100 [00:05<00:07,  7.60epoch/s, loss=0.0705, prev_loss=0.086]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  41%|####1     | 41/100 [00:05<00:07,  7.60epoch/s, loss=0.0723, prev_loss=0.0705]Training epochs on cpu:  42%|####2     | 42/100 [00:05<00:07,  7.75epoch/s, loss=0.0723, prev_loss=0.0705]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  42%|####2     | 42/100 [00:05<00:07,  7.75epoch/s, loss=0.0824, prev_loss=0.0723]Training epochs on cpu:  43%|####3     | 43/100 [00:05<00:07,  7.90epoch/s, loss=0.0824, prev_loss=0.0723]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  43%|####3     | 43/100 [00:05<00:07,  7.90epoch/s, loss=0.0669, prev_loss=0.0824]Training epochs on cpu:  44%|####4     | 44/100 [00:05<00:07,  7.96epoch/s, loss=0.0669, prev_loss=0.0824]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  44%|####4     | 44/100 [00:05<00:07,  7.96epoch/s, loss=0.0919, prev_loss=0.0669]Training epochs on cpu:  45%|####5     | 45/100 [00:05<00:06,  8.04epoch/s, loss=0.0919, prev_loss=0.0669]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  45%|####5     | 45/100 [00:05<00:06,  8.04epoch/s, loss=0.0682, prev_loss=0.0919]Training epochs on cpu:  46%|####6     | 46/100 [00:05<00:06,  8.00epoch/s, loss=0.0682, prev_loss=0.0919]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  46%|####6     | 46/100 [00:06<00:06,  8.00epoch/s, loss=0.0614, prev_loss=0.0682]Training epochs on cpu:  47%|####6     | 47/100 [00:06<00:06,  7.82epoch/s, loss=0.0614, prev_loss=0.0682]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  47%|####6     | 47/100 [00:06<00:06,  7.82epoch/s, loss=0.0812, prev_loss=0.0614]Training epochs on cpu:  48%|####8     | 48/100 [00:06<00:06,  7.92epoch/s, loss=0.0812, prev_loss=0.0614]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  48%|####8     | 48/100 [00:06<00:06,  7.92epoch/s, loss=0.0547, prev_loss=0.0812]Training epochs on cpu:  49%|####9     | 49/100 [00:06<00:06,  8.00epoch/s, loss=0.0547, prev_loss=0.0812]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  49%|####9     | 49/100 [00:06<00:06,  8.00epoch/s, loss=0.0591, prev_loss=0.0547]Training epochs on cpu:  50%|#####     | 50/100 [00:06<00:06,  8.04epoch/s, loss=0.0591, prev_loss=0.0547]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  50%|#####     | 50/100 [00:06<00:06,  8.04epoch/s, loss=0.0692, prev_loss=0.0591]Training epochs on cpu:  51%|#####1    | 51/100 [00:06<00:06,  8.07epoch/s, loss=0.0692, prev_loss=0.0591]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  51%|#####1    | 51/100 [00:06<00:06,  8.07epoch/s, loss=0.0842, prev_loss=0.0692]Training epochs on cpu:  52%|#####2    | 52/100 [00:06<00:05,  8.07epoch/s, loss=0.0842, prev_loss=0.0692]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  52%|#####2    | 52/100 [00:06<00:05,  8.07epoch/s, loss=0.0843, prev_loss=0.0842]Training epochs on cpu:  53%|#####3    | 53/100 [00:06<00:05,  8.05epoch/s, loss=0.0843, prev_loss=0.0842]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  53%|#####3    | 53/100 [00:06<00:05,  8.05epoch/s, loss=0.0699, prev_loss=0.0843]Training epochs on cpu:  54%|#####4    | 54/100 [00:06<00:05,  8.06epoch/s, loss=0.0699, prev_loss=0.0843]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  54%|#####4    | 54/100 [00:06<00:05,  8.06epoch/s, loss=0.0628, prev_loss=0.0699]Training epochs on cpu:  55%|#####5    | 55/100 [00:06<00:05,  8.10epoch/s, loss=0.0628, prev_loss=0.0699]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  55%|#####5    | 55/100 [00:07<00:05,  8.10epoch/s, loss=0.0791, prev_loss=0.0628]Training epochs on cpu:  56%|#####6    | 56/100 [00:07<00:05,  8.01epoch/s, loss=0.0791, prev_loss=0.0628]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  56%|#####6    | 56/100 [00:07<00:05,  8.01epoch/s, loss=0.0733, prev_loss=0.0791]Training epochs on cpu:  57%|#####6    | 57/100 [00:07<00:05,  7.85epoch/s, loss=0.0733, prev_loss=0.0791]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  57%|#####6    | 57/100 [00:07<00:05,  7.85epoch/s, loss=0.0682, prev_loss=0.0733]Training epochs on cpu:  58%|#####8    | 58/100 [00:07<00:05,  7.67epoch/s, loss=0.0682, prev_loss=0.0733]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  58%|#####8    | 58/100 [00:07<00:05,  7.67epoch/s, loss=0.0745, prev_loss=0.0682]Training epochs on cpu:  59%|#####8    | 59/100 [00:07<00:05,  7.73epoch/s, loss=0.0745, prev_loss=0.0682]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  59%|#####8    | 59/100 [00:07<00:05,  7.73epoch/s, loss=0.0697, prev_loss=0.0745]Training epochs on cpu:  60%|######    | 60/100 [00:07<00:05,  7.60epoch/s, loss=0.0697, prev_loss=0.0745]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  60%|######    | 60/100 [00:07<00:05,  7.60epoch/s, loss=0.0725, prev_loss=0.0697]Training epochs on cpu:  61%|######1   | 61/100 [00:07<00:05,  7.78epoch/s, loss=0.0725, prev_loss=0.0697]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  61%|######1   | 61/100 [00:07<00:05,  7.78epoch/s, loss=0.0778, prev_loss=0.0725]Training epochs on cpu:  62%|######2   | 62/100 [00:07<00:04,  7.92epoch/s, loss=0.0778, prev_loss=0.0725]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  62%|######2   | 62/100 [00:08<00:04,  7.92epoch/s, loss=0.0494, prev_loss=0.0778]Training epochs on cpu:  63%|######3   | 63/100 [00:08<00:04,  7.97epoch/s, loss=0.0494, prev_loss=0.0778]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  63%|######3   | 63/100 [00:08<00:04,  7.97epoch/s, loss=0.0526, prev_loss=0.0494]Training epochs on cpu:  64%|######4   | 64/100 [00:08<00:04,  8.03epoch/s, loss=0.0526, prev_loss=0.0494]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  64%|######4   | 64/100 [00:08<00:04,  8.03epoch/s, loss=0.0785, prev_loss=0.0526]Training epochs on cpu:  65%|######5   | 65/100 [00:08<00:04,  8.00epoch/s, loss=0.0785, prev_loss=0.0526]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  65%|######5   | 65/100 [00:08<00:04,  8.00epoch/s, loss=0.072, prev_loss=0.0785] Training epochs on cpu:  66%|######6   | 66/100 [00:08<00:04,  7.91epoch/s, loss=0.072, prev_loss=0.0785]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  66%|######6   | 66/100 [00:08<00:04,  7.91epoch/s, loss=0.0726, prev_loss=0.072]Training epochs on cpu:  67%|######7   | 67/100 [00:08<00:04,  7.90epoch/s, loss=0.0726, prev_loss=0.072]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  67%|######7   | 67/100 [00:08<00:04,  7.90epoch/s, loss=0.0575, prev_loss=0.0726]Training epochs on cpu:  68%|######8   | 68/100 [00:08<00:04,  7.74epoch/s, loss=0.0575, prev_loss=0.0726]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  68%|######8   | 68/100 [00:08<00:04,  7.74epoch/s, loss=0.0563, prev_loss=0.0575]Training epochs on cpu:  69%|######9   | 69/100 [00:08<00:03,  7.84epoch/s, loss=0.0563, prev_loss=0.0575]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  69%|######9   | 69/100 [00:08<00:03,  7.84epoch/s, loss=0.0752, prev_loss=0.0563]Training epochs on cpu:  70%|#######   | 70/100 [00:08<00:03,  7.92epoch/s, loss=0.0752, prev_loss=0.0563]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  70%|#######   | 70/100 [00:09<00:03,  7.92epoch/s, loss=0.0616, prev_loss=0.0752]Training epochs on cpu:  71%|#######1  | 71/100 [00:09<00:03,  7.98epoch/s, loss=0.0616, prev_loss=0.0752]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  71%|#######1  | 71/100 [00:09<00:03,  7.98epoch/s, loss=0.0881, prev_loss=0.0616]Training epochs on cpu:  72%|#######2  | 72/100 [00:09<00:03,  8.01epoch/s, loss=0.0881, prev_loss=0.0616]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  72%|#######2  | 72/100 [00:09<00:03,  8.01epoch/s, loss=0.0579, prev_loss=0.0881]Training epochs on cpu:  73%|#######3  | 73/100 [00:09<00:03,  8.05epoch/s, loss=0.0579, prev_loss=0.0881]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  73%|#######3  | 73/100 [00:09<00:03,  8.05epoch/s, loss=0.0942, prev_loss=0.0579]Training epochs on cpu:  74%|#######4  | 74/100 [00:09<00:03,  8.06epoch/s, loss=0.0942, prev_loss=0.0579]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  74%|#######4  | 74/100 [00:09<00:03,  8.06epoch/s, loss=0.0765, prev_loss=0.0942]Training epochs on cpu:  75%|#######5  | 75/100 [00:09<00:03,  8.08epoch/s, loss=0.0765, prev_loss=0.0942]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  75%|#######5  | 75/100 [00:09<00:03,  8.08epoch/s, loss=0.0694, prev_loss=0.0765]Training epochs on cpu:  76%|#######6  | 76/100 [00:09<00:02,  8.08epoch/s, loss=0.0694, prev_loss=0.0765]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  76%|#######6  | 76/100 [00:09<00:02,  8.08epoch/s, loss=0.0703, prev_loss=0.0694]Training epochs on cpu:  77%|#######7  | 77/100 [00:09<00:02,  8.08epoch/s, loss=0.0703, prev_loss=0.0694]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  77%|#######7  | 77/100 [00:09<00:02,  8.08epoch/s, loss=0.0858, prev_loss=0.0703]Training epochs on cpu:  78%|#######8  | 78/100 [00:09<00:02,  8.12epoch/s, loss=0.0858, prev_loss=0.0703]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  78%|#######8  | 78/100 [00:10<00:02,  8.12epoch/s, loss=0.0725, prev_loss=0.0858]Training epochs on cpu:  79%|#######9  | 79/100 [00:10<00:02,  8.00epoch/s, loss=0.0725, prev_loss=0.0858]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  79%|#######9  | 79/100 [00:10<00:02,  8.00epoch/s, loss=0.0681, prev_loss=0.0725]Training epochs on cpu:  80%|########  | 80/100 [00:10<00:02,  8.06epoch/s, loss=0.0681, prev_loss=0.0725]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  80%|########  | 80/100 [00:10<00:02,  8.06epoch/s, loss=0.0754, prev_loss=0.0681]Training epochs on cpu:  81%|########1 | 81/100 [00:10<00:02,  8.09epoch/s, loss=0.0754, prev_loss=0.0681]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  81%|########1 | 81/100 [00:10<00:02,  8.09epoch/s, loss=0.0654, prev_loss=0.0754]Training epochs on cpu:  82%|########2 | 82/100 [00:10<00:02,  8.09epoch/s, loss=0.0654, prev_loss=0.0754]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  82%|########2 | 82/100 [00:10<00:02,  8.09epoch/s, loss=0.0669, prev_loss=0.0654]Training epochs on cpu:  83%|########2 | 83/100 [00:10<00:02,  8.03epoch/s, loss=0.0669, prev_loss=0.0654]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  83%|########2 | 83/100 [00:10<00:02,  8.03epoch/s, loss=0.0743, prev_loss=0.0669]Training epochs on cpu:  84%|########4 | 84/100 [00:10<00:01,  8.07epoch/s, loss=0.0743, prev_loss=0.0669]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  84%|########4 | 84/100 [00:10<00:01,  8.07epoch/s, loss=0.0733, prev_loss=0.0743]Training epochs on cpu:  85%|########5 | 85/100 [00:10<00:01,  7.99epoch/s, loss=0.0733, prev_loss=0.0743]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  85%|########5 | 85/100 [00:10<00:01,  7.99epoch/s, loss=0.0707, prev_loss=0.0733]Training epochs on cpu:  86%|########6 | 86/100 [00:10<00:01,  7.90epoch/s, loss=0.0707, prev_loss=0.0733]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  86%|########6 | 86/100 [00:11<00:01,  7.90epoch/s, loss=0.0611, prev_loss=0.0707]Training epochs on cpu:  87%|########7 | 87/100 [00:11<00:01,  7.79epoch/s, loss=0.0611, prev_loss=0.0707]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  87%|########7 | 87/100 [00:11<00:01,  7.79epoch/s, loss=0.0622, prev_loss=0.0611]Training epochs on cpu:  88%|########8 | 88/100 [00:11<00:01,  7.90epoch/s, loss=0.0622, prev_loss=0.0611]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  88%|########8 | 88/100 [00:11<00:01,  7.90epoch/s, loss=0.0801, prev_loss=0.0622]Training epochs on cpu:  89%|########9 | 89/100 [00:11<00:01,  7.98epoch/s, loss=0.0801, prev_loss=0.0622]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  89%|########9 | 89/100 [00:11<00:01,  7.98epoch/s, loss=0.07, prev_loss=0.0801]  Training epochs on cpu:  90%|######### | 90/100 [00:11<00:01,  7.97epoch/s, loss=0.07, prev_loss=0.0801]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  90%|######### | 90/100 [00:11<00:01,  7.97epoch/s, loss=0.0667, prev_loss=0.07]Training epochs on cpu:  91%|#########1| 91/100 [00:11<00:01,  8.00epoch/s, loss=0.0667, prev_loss=0.07]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  91%|#########1| 91/100 [00:11<00:01,  8.00epoch/s, loss=0.053, prev_loss=0.0667]Training epochs on cpu:  92%|#########2| 92/100 [00:11<00:01,  7.96epoch/s, loss=0.053, prev_loss=0.0667]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  92%|#########2| 92/100 [00:11<00:01,  7.96epoch/s, loss=0.0624, prev_loss=0.053]Training epochs on cpu:  93%|#########3| 93/100 [00:11<00:00,  7.97epoch/s, loss=0.0624, prev_loss=0.053]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  93%|#########3| 93/100 [00:11<00:00,  7.97epoch/s, loss=0.0626, prev_loss=0.0624]Training epochs on cpu:  94%|#########3| 94/100 [00:11<00:00,  7.98epoch/s, loss=0.0626, prev_loss=0.0624]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  94%|#########3| 94/100 [00:12<00:00,  7.98epoch/s, loss=0.0512, prev_loss=0.0626]Training epochs on cpu:  95%|#########5| 95/100 [00:12<00:00,  7.96epoch/s, loss=0.0512, prev_loss=0.0626]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  95%|#########5| 95/100 [00:12<00:00,  7.96epoch/s, loss=0.0647, prev_loss=0.0512]Training epochs on cpu:  96%|#########6| 96/100 [00:12<00:00,  8.05epoch/s, loss=0.0647, prev_loss=0.0512]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  96%|#########6| 96/100 [00:12<00:00,  8.05epoch/s, loss=0.0554, prev_loss=0.0647]Training epochs on cpu:  97%|#########7| 97/100 [00:12<00:00,  8.10epoch/s, loss=0.0554, prev_loss=0.0647]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  97%|#########7| 97/100 [00:12<00:00,  8.10epoch/s, loss=0.0726, prev_loss=0.0554]Training epochs on cpu:  98%|#########8| 98/100 [00:12<00:00,  7.97epoch/s, loss=0.0726, prev_loss=0.0554]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  98%|#########8| 98/100 [00:12<00:00,  7.97epoch/s, loss=0.0682, prev_loss=0.0726]Training epochs on cpu:  99%|#########9| 99/100 [00:12<00:00,  8.03epoch/s, loss=0.0682, prev_loss=0.0726]
+Training batches on cpu:   0%|          | 0.00/8.00 [00:00<?, ?batch/s][A
+                                                                       [ATraining epochs on cpu:  99%|#########9| 99/100 [00:12<00:00,  8.03epoch/s, loss=0.0726, prev_loss=0.0682]Training epochs on cpu: 100%|##########| 100/100 [00:12<00:00,  8.07epoch/s, loss=0.0726, prev_loss=0.0682]Training epochs on cpu: 100%|##########| 100/100 [00:12<00:00,  7.90epoch/s, loss=0.0726, prev_loss=0.0682]
+WARNING:pykeen.utils:Using automatic batch size on device.type='cpu' can cause unexplained out-of-memory crashes. Therefore, we use a conservative small batch_size=32. Performance may be improved by explicitly specifying a larger batch size.
+Evaluating on cpu:   0%|          | 0.00/462 [00:00<?, ?triple/s]WARNING:torch_max_mem.api:Encountered tensors on device_types={'cpu'} while only ['cuda'] are considered safe for automatic memory utilization maximization. This may lead to undocumented crashes (but can be safe, too).
+Evaluating on cpu:   0%|          | 0.00/462 [00:00<?, ?triple/s]Evaluating on cpu:  48%|####8     | 224/462 [00:00<00:00, 2.09ktriple/s]Evaluating on cpu:  97%|#########6| 448/462 [00:00<00:00, 2.13ktriple/s]Evaluating on cpu: 100%|##########| 462/462 [00:00<00:00, 1.80ktriple/s]
+INFO:pykeen.evaluation.evaluator:Evaluation took 0.28s seconds
+  PyKEEN evaluation — Hits@10: 0.0552
+  1577 drug nodes, 25 disease nodes in model.
+Training done in 34s. Model saved to C:\Users\Rasika Mane\Documents\Drugenix-main\Drugenix-main\data\transe_model
+
+Evaluating TransE on PREDICT-style benchmark...
+Evaluating on 133 positive + 399 negative test pairs...
+
+==================================================
+PREDICT-style Benchmark Results (TransE)
+==================================================
+  AUROC:    0.883
+  Hit@1:    0.200
+  Hit@5:    0.733
+  Hit@10:   0.933
+  Coverage: 1.000 (fraction of test drugs in vocab)
+  Test:     133 pos / 399 neg pairs
+
+Saved to C:\Users\Rasika Mane\Documents\Drugenix-main\Drugenix-main\data\predict_benchmark.json
+
+Sample novel drug predictions (TransE link prediction):
+
+  Alzheimer Disease:
+    Flortaucipir F 18              confidence=1.000  dist=0.7038
+    Tramiprosate                   confidence=0.960  dist=0.7459
+    Lecanemab                      confidence=0.946  dist=0.7604
+    Nilotinib                      confidence=0.921  dist=0.7863
+    Brexpiprazole                  confidence=0.887  dist=0.8223
+
+  Type 2 Diabetes:
+    Avexitide                      confidence=1.000  dist=0.6848
+    Insulin Degludec               confidence=0.962  dist=0.7272
+    Tesaglitazar                   confidence=0.958  dist=0.7319
+    Semaglutide                    confidence=0.949  dist=0.7417
+    Insulin Pork                   confidence=0.868  dist=0.8311
+
+  Breast Cancer:
+    Veliparib                      confidence=1.000  dist=0.5994
+    Afuresertib                    confidence=0.980  dist=0.6219
+    Oxybutynin                     confidence=0.903  dist=0.7071
+    Etirinotecan Pegol             confidence=0.897  dist=0.7135
+    Neratinib Maleate              confidence=0.876  dist=0.7370

@@ -1,0 +1,176 @@
+[
+  {
+    "id": "metformin_cancer",
+    "drug": "Metformin",
+    "disease": "Cancer",
+    "original_use": "Type 2 diabetes",
+    "repurposing_rationale": "AMPK activation inhibits mTOR signaling and cancer cell proliferation",
+    "key_mechanism": "AMPK \u2192 mTOR inhibition \u2192 anti-proliferative",
+    "evidence_level": "Phase III clinical trials",
+    "query": "Cancer",
+    "pipeline_result": {
+      "elapsed_seconds": 120.6,
+      "total_candidates": 15,
+      "recommended_count": 4,
+      "target_drug_found": false,
+      "target_drug_rank": null,
+      "target_drug_confidence": null,
+      "target_drug_kg_validated": false,
+      "target_drug_pmid_count": 0,
+      "top_5_candidates": [
+        {
+          "drug": "Immunotherapy",
+          "confidence": 0.635,
+          "kg_validated": false
+        },
+        {
+          "drug": "Chemotherapy",
+          "confidence": 0.555,
+          "kg_validated": false
+        },
+        {
+          "drug": "Currently",
+          "confidence": 0.555,
+          "kg_validated": false
+        },
+        {
+          "drug": "Resistance",
+          "confidence": 0.493,
+          "kg_validated": false
+        },
+        {
+          "drug": "Cancers",
+          "confidence": 0.417,
+          "kg_validated": false
+        }
+      ]
+    },
+    "kg_validation": {
+      "has_direct_path": true,
+      "has_indirect_path": false,
+      "path_length": 1,
+      "known_targets": [
+        "AMPK"
+      ],
+      "known_mechanism": "AMPK activator, anti-proliferative",
+      "explanation": "Direct KG link: Metformin -> Cancer"
+    },
+    "status": "success"
+  },
+  {
+    "id": "sildenafil_pah",
+    "drug": "Sildenafil",
+    "disease": "Pulmonary hypertension",
+    "original_use": "Erectile dysfunction",
+    "repurposing_rationale": "PDE5 inhibition in pulmonary vasculature causes vasodilation, reducing arterial pressure",
+    "key_mechanism": "PDE5 inhibition \u2192 cGMP elevation \u2192 pulmonary vasodilation",
+    "evidence_level": "FDA approved (Revatio, 2005)",
+    "query": "Pulmonary hypertension",
+    "pipeline_result": {
+      "elapsed_seconds": 4.3,
+      "total_candidates": 15,
+      "recommended_count": 10,
+      "target_drug_found": false,
+      "target_drug_rank": null,
+      "target_drug_confidence": null,
+      "target_drug_kg_validated": false,
+      "target_drug_pmid_count": 0,
+      "top_5_candidates": [
+        {
+          "drug": "Hypertension",
+          "confidence": 0.806,
+          "kg_validated": true
+        },
+        {
+          "drug": "Pulmonary",
+          "confidence": 0.648,
+          "kg_validated": false
+        },
+        {
+          "drug": "Oxygen",
+          "confidence": 0.605,
+          "kg_validated": true
+        },
+        {
+          "drug": "Arterial",
+          "confidence": 0.555,
+          "kg_validated": false
+        },
+        {
+          "drug": "Targeted",
+          "confidence": 0.555,
+          "kg_validated": false
+        }
+      ]
+    },
+    "kg_validation": {
+      "has_direct_path": true,
+      "has_indirect_path": false,
+      "path_length": 1,
+      "known_targets": [
+        "PDE5A"
+      ],
+      "known_mechanism": "PDE5 inhibitor (repurposed from erectile dysfunction)",
+      "explanation": "Direct KG link: Sildenafil -> Pulmonary hypertension"
+    },
+    "status": "success"
+  },
+  {
+    "id": "thalidomide_myeloma",
+    "drug": "Thalidomide",
+    "disease": "Multiple myeloma",
+    "original_use": "Morning sickness (withdrawn 1961)",
+    "repurposing_rationale": "Immunomodulatory effects (IMiD) and anti-angiogenic properties suppress myeloma growth",
+    "key_mechanism": "Cereblon binding \u2192 Ikaros/Aiolos degradation \u2192 myeloma apoptosis",
+    "evidence_level": "FDA approved (2006) + standard of care",
+    "query": "Multiple myeloma",
+    "pipeline_result": {
+      "elapsed_seconds": 3.7,
+      "total_candidates": 15,
+      "recommended_count": 6,
+      "target_drug_found": false,
+      "target_drug_rank": null,
+      "target_drug_confidence": null,
+      "target_drug_kg_validated": false,
+      "target_drug_pmid_count": 0,
+      "top_5_candidates": [
+        {
+          "drug": "However",
+          "confidence": 0.555,
+          "kg_validated": false
+        },
+        {
+          "drug": "Supportive",
+          "confidence": 0.476,
+          "kg_validated": false
+        },
+        {
+          "drug": "Chemotherapy",
+          "confidence": 0.476,
+          "kg_validated": false
+        },
+        {
+          "drug": "Improve",
+          "confidence": 0.476,
+          "kg_validated": false
+        },
+        {
+          "drug": "Quality",
+          "confidence": 0.476,
+          "kg_validated": false
+        }
+      ]
+    },
+    "kg_validation": {
+      "has_direct_path": true,
+      "has_indirect_path": false,
+      "path_length": 1,
+      "known_targets": [
+        "TNF"
+      ],
+      "known_mechanism": "CRL4(CRBN) E3 ubiquitin ligase inhibitor",
+      "explanation": "Direct KG link: Thalidomide -> Multiple myeloma"
+    },
+    "status": "success"
+  }
+]

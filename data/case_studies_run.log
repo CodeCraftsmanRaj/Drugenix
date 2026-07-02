@@ -1,0 +1,43 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Drugenix Case Study Validations
+============================================================
+Running 3 landmark repurposing cases through the pipeline...
+
+============================================================
+Case Study: Metformin -> Cancer
+Query: 'Cancer'
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|##########| 103/103 [00:00<00:00, 3963.53it/s]
+Loading weights:   0%|          | 0/102 [00:00<?, ?it/s]Loading weights: 100%|##########| 102/102 [00:00<00:00, 4271.61it/s]
+[Drugenix] LLM returned no candidates (provider=openai); falling back to heuristic extraction.
+[Drugenix] LLM returned no candidates (provider=openai); falling back to heuristic extraction.
+[Drugenix] LLM returned no candidates (provider=openai); falling back to heuristic extraction.
+[Drugenix] LLM returned no candidates (provider=openai); falling back to heuristic extraction.
+[Drugenix] LLM returned no candidates (provider=openai); falling back to heuristic extraction.
+[Drugenix] LLM returned no candidates (provider=openai); falling back to heuristic extraction.
+  Found 15 candidates in 120.6s
+  Target drug 'Metformin' NOT in top results (may be outside retmax scope)
+  KG: Direct KG link: Metformin -> Cancer
+
+============================================================
+Case Study: Sildenafil -> Pulmonary hypertension
+Query: 'Pulmonary hypertension'
+  Found 15 candidates in 4.3s
+  Target drug 'Sildenafil' NOT in top results (may be outside retmax scope)
+  KG: Direct KG link: Sildenafil -> Pulmonary hypertension
+
+============================================================
+Case Study: Thalidomide -> Multiple myeloma
+Query: 'Multiple myeloma'
+  Found 15 candidates in 3.7s
+  Target drug 'Thalidomide' NOT in top results (may be outside retmax scope)
+  KG: Direct KG link: Thalidomide -> Multiple myeloma
+
+
+Saved case study results to: C:\Users\Rasika Mane\Documents\Drugenix-main\Drugenix-main\data\case_studies.json
+
+======================================================================
+Case Study                     Found    Rank   KG       Status
+----------------------------------------------------------------------
+  Metformin -> Cancer          No       -      Direct   success
+  Sildenafil -> Pulmonary hypertension No       -      Direct   success
+  Thalidomide -> Multiple myeloma No       -      Direct   success

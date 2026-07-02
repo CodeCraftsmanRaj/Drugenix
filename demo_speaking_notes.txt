@@ -1,0 +1,129 @@
+SCRIPT 1 — PROJECT + HOW TO RUN + RESULTS
+
+Opening line:
+"This project is Drugenix, a modular drug repurposing system. It takes a disease query, retrieves biomedical evidence from PubMed, reasons over that evidence to suggest candidate drugs, and then validates the candidates using lightweight checks."
+
+What the system does:
+- Retrieval Agent: fetches relevant PubMed abstracts using NCBI E-Utilities.
+- Reasoning Agent: generates candidate drugs and explanations from the retrieved evidence.
+- Validation Agent: checks plausibility, evidence grounding, and safety keywords.
+- The current MVP is the Retrieval + Reasoning pipeline, and the validation layer is now integrated as well.
+
+What command to run:
+1) Single inference with natural language query:
+   uv run scripts/infer.py "Find repurposed drug candidates for Alzheimer disease with evidence from PubMed" --provider ollama --model llama3.1:8b --retmax 40 --top-k 8
+
+2) Another example:
+   uv run scripts/infer.py "Find promising repurposed drugs for Parkinson disease" --provider ollama --model llama3.1:8b --retmax 40 --top-k 8
+
+3) Batch testing on multiple diseases:
+   uv run scripts/run_queries.py --queries data/more_diseases.txt --out outputs/test_preds_more_diseases_ollama.jsonl --retmax 50 --top-k 8 --provider ollama --model llama3.1:8b
+
+Technical explanation:
+- PubMed retrieval is dynamic, so the pipeline does not use hard-coded drugs.
+- The query is normalized into a PubMed-friendly search term.
+- Retrieved abstracts are ranked by relevance score.
+- The reasoning step uses the selected LLM or a fallback heuristic.
+- The output is saved as JSON and markdown so it can be shown in a demo.
+- The system supports Ollama, OpenAI, Gemini, and OpenAI-compatible APIs.
+
+Datasets / sources used:
+- Live PubMed abstracts through NCBI E-Utilities.
+- No fixed local dataset was required for MVP inference.
+- Future validation datasets mentioned in the project include MeSH, CTD, ChEMBL, DrugCentral, and Open Targets.
+
+Inference results to show:
+- For Alzheimer disease, the system returned grounded candidate drugs such as Donepezil, Rivastigmine, Oestrogen therapy, Rapamycin, and Mannitol.
+- For dynamic batch testing, different diseases produced different top suggestions:
+  - Parkinson disease -> Levodopa
+  - Type 2 diabetes -> Empagliflozin
+  - Breast cancer -> Tamoxifen
+  - Hypertension -> Statins
+  - Asthma -> Inhaled Corticosteroids
+- This proves the output changes with the query and is not hard-coded.
+
+Exact paths to show during demo:
+- Single-query JSON result:
+   outputs/inference/find-repurposed-drug-candidates-for-alzheimer-disease-with-evidence-from-pubmed.json
+- Single-query markdown report:
+   outputs/inference/find-repurposed-drug-candidates-for-alzheimer-disease-with-evidence-from-pubmed.md
+- Batch multi-disease raw results:
+   outputs/test_preds_more_diseases_ollama.jsonl
+- Batch summary for quick viewing:
+   outputs/dynamic_batch_summary.md
+- Example older validated run (Alzheimer):
+   outputs/alzheimer_ollama_llama31_8b.json
+
+How to present from files:
+- Open markdown summary first (easy for viva): outputs/dynamic_batch_summary.md
+- Then open single-query markdown report to show evidence-linked outputs.
+- Then open JSON file briefly to show raw machine-readable structure.
+
+How to explain the result:
+"The system retrieves evidence from literature, then suggests drugs that are supported by that evidence. Since the results change depending on the disease, it shows the model is actually using the query and retrieved evidence."
+
+
+SCRIPT 2 — AGENTS NOT YET BUILT + FUTURE WORK
+
+Opening line:
+"The current project has a working retrieval, reasoning, and validation pipeline, but the full multi-agent system is still under development."
+
+Agents already working:
+- Retrieval Agent
+- Reasoning Agent
+- Validation Agent
+
+Agents still to be built:
+1) Planner Agent
+   - Breaks a disease query into smaller sub-tasks.
+   - Decides what evidence to retrieve and what reasoning path to follow.
+
+2) Aggregation / Explanation Agent
+   - Combines outputs from retrieval, reasoning, and validation.
+   - Assigns final confidence or evidence scores.
+   - Produces a clean final recommendation with traceable reasoning.
+
+What work is still pending:
+- Better validation using structured biomedical knowledge graphs.
+- Stronger benchmark evaluation on a curated gold dataset.
+- Improved ranking of final drug candidates.
+- Better safety and contraindication filtering.
+- Better explanation quality for viva/demo use.
+- A cleaner UI/dashboard for showing results.
+- Optional offline corpora integration if required for faster repeated evaluation.
+
+Main metrics + current results to explain in Script 2:
+- Retrieval metrics:
+   - Precision@k and nDCG@k are plotted in:
+      - plots/precision_at_k.png
+      - plots/ndcg_at_k.png
+   - Current benchmark summary file:
+      - data/metrics_drugenix_mvp.json
+- Generation metrics:
+   - Top-k Accuracy plot:
+      - plots/top_k_accuracy.png
+   - Groundedness distribution plot:
+      - plots/groundedness_hist.png
+   - Ablation plot (Without RAG vs With RAG):
+      - plots/ablation_rag.png
+
+How to explain metric meaning (short lines):
+- Precision@k: among top-k retrieved papers, how many are relevant.
+- nDCG@k: whether relevant papers are ranked near the top.
+- Top-k Accuracy: whether at least one correct drug appears in top-k suggestions.
+- Groundedness: how much the generated explanation is supported by retrieved evidence.
+- Ablation: shows RAG improves correctness/grounding over non-RAG.
+
+Current result highlights to say:
+- Multi-disease run produced different top drugs per disease (dynamic behavior confirmed).
+- Generated outputs are evidence-linked with PMID references.
+- Plots for retrieval quality, ranking quality, generation quality, and RAG gain are already generated in the plots/ folder.
+
+Future direction:
+- Add the Planner Agent first.
+- Then add the Aggregation / Explanation Agent.
+- After that, use the validation layer to score and rank final recommendations.
+- Finally, move toward a full end-to-end multi-agent system.
+
+Closing line:
+"So the project is already functional as a prototype, but the next step is to make it a full multi-agent, explainable, and benchmarked drug repurposing system."

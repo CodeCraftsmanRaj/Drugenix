@@ -1,0 +1,17 @@
+week_no,week_start,week_end,raj_hours,paawan_hours,rasika_hours,total_hours,work_focus,short_description
+1,2026-01-26,2026-02-01,2,2,2,6,Literature survey + planning,Team orientation; survey of drug repurposing RAG papers; roles defined; project scope finalized.
+2,2026-02-02,2026-02-08,2,2,2,6,Literature survey + setup,Reviewed PubMed/NCBI sources; collected references; initial repo setup and README outline.
+3,2026-02-09,2026-02-15,2,2,2,6,Literature survey + architecture,Surveyed retrieval/ranking methods; drafted agent architecture and evaluation ideas.
+4,2026-02-16,2026-02-22,3,2,2,7,Retrieval design,Raj started retrieval implementation; Paawan documented flow; Rasika supported experiments and notes.
+5,2026-02-23,2026-03-01,3,2,2,7,Retrieval prototype,PubMed E-utilities retrieval prototype built; query handling and reranking strategy refined.
+6,2026-03-02,2026-03-08,3,2,2,7,Retrieval testing + docs,Tested retrieval outputs, fixed edge cases, and updated project documentation.
+7,2026-03-09,2026-03-15,3,2,2,7,Reasoning pipeline,Added RAG-style reasoning stage; candidate generation began using retrieved evidence.
+8,2026-03-16,2026-03-22,3,2,3,8,Reasoning + experiments,Rasika balanced experiments; Raj refined candidate generation; Paawan documented methods.
+9,2026-03-23,2026-03-29,3,2,3,8,Validation design,Designed validation checks for plausibility, evidence grounding, and safety flags.
+10,2026-03-30,2026-04-05,3,2,3,8,Validation implementation,Implemented validation rules and candidate status outputs for PASS/WARN/FAIL.
+11,2026-04-06,2026-04-12,3,3,2,8,Metrics setup,Added retrieval metrics and evaluation scaffolding; Paawan expanded report sections.
+12,2026-04-13,2026-04-19,3,3,2,8,Plotting + benchmarking,Created plots for Precision@k, nDCG@k, Top-k Accuracy, groundedness, and ablation.
+13,2026-04-20,2026-04-26,3,3,2,8,Inference workflow,Added human-language inference reporting and saved query outputs for presentation.
+14,2026-04-27,2026-05-03,3,3,3,9,System integration,Integrated retrieval, reasoning, and validation into one pipeline and tested end-to-end.
+15,2026-05-04,2026-05-10,3,3,3,9,Final testing + documentation,Final debugging, result review, README updates, and demo preparation.
+16,2026-05-11,2026-05-13,2,2,2,6,Submission wrap-up,Final inference checks, presentation polish, and submission-ready consolidation.
