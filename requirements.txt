@@ -12,3 +12,8 @@ fastapi>=0.115.0
 uvicorn[standard]>=0.30.0
 pydantic>=2.0
 networkx>=3.2
+# Official Google SDK for Gemini — handles auth key format (AQ. vs AIza),
+# endpoint versioning, and API migrations internally. More reliable than
+# hand-rolled HTTP calls against endpoints Google has been actively
+# changing throughout 2026.
+google-genai>=1.0.0

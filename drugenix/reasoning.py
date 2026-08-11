@@ -195,17 +195,16 @@ def _call_openai_compatible_chat(prompt: str) -> list[DrugCandidate]:
     return [c for c in out if c.drug]
 
 
-def _call_gemini_interactions(prompt: str, config: dict[str, str]) -> list[DrugCandidate]:
+def _call_gemini_sdk(prompt: str, config: dict[str, str]) -> list[DrugCandidate]:
     """
-    Call Gemini via the Interactions API (v1beta2/interactions).
+    Call Gemini via Google's official `google-genai` SDK rather than
+    hand-rolled HTTP calls.
 
-    As of mid/late-2026, Google has fully migrated newer API keys/accounts
-    off the classic generateContent endpoint — both gemini-2.5-flash and
-    gemini-2.5-flash-lite return a hard 404 ("this model is no longer
-    available to new users") for accounts created after the cutover, and
-    Google's own docs point exclusively at the Interactions API as the
-    replacement. This is a different request/response shape entirely
-    (single "input" string in, a "steps" array out), not just a URL change.
+    Google has changed the Gemini HTTP surface repeatedly through 2026 (key
+    format AIza -> AQ., generateContent being restricted for newer accounts,
+    the new Interactions API) and hand-matching each change via raw urllib
+    calls is fragile — the SDK is maintained by Google specifically to
+    absorb these changes so callers don't have to track them.
     """
     api_key = config["api_key"]
     model = config["model"]
@@ -213,50 +212,23 @@ def _call_gemini_interactions(prompt: str, config: dict[str, str]) -> list[DrugC
     if not api_key or not model:
         return []
 
+    from google import genai  # local import: optional dependency
+
+    client = genai.Client(api_key=api_key)
+
     system_instruction = (
         "You are a biomedical reasoning assistant. "
         "Only propose drugs supported by provided evidence snippets. "
         "Always return valid JSON only."
     )
 
-    url = "https://generativelanguage.googleapis.com/v1beta2/interactions"
-    payload = {
-        "model": model,
-        "input": f"{system_instruction}\n\n{prompt}",
-        "response_format": [
-            {"type": "text", "mime_type": "application/json"}
-        ],
-    }
-
-    req = urllib.request.Request(
-        url=url,
-        method="POST",
-        headers={
-            "Content-Type": "application/json",
-            "x-goog-api-key": api_key,
-        },
-        data=json.dumps(payload).encode("utf-8"),
+    interaction = client.interactions.create(
+        model=model,
+        input=f"{system_instruction}\n\n{prompt}",
+        response_format=[{"type": "text", "mime_type": "application/json"}],
     )
 
-    try:
-        with urllib.request.urlopen(req, timeout=180) as response:
-            data = response.read().decode("utf-8")
-    except urllib.error.HTTPError as exc:
-        # Surface Google's actual error body instead of a bare status code —
-        # that's what actually explains failures, not the code alone.
-        body = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"Gemini Interactions API error {exc.code}: {body}") from exc
-
-    response_json = json.loads(data)
-
-    content = ""
-    for step in response_json.get("steps", []):
-        if step.get("type") != "model_output":
-            continue
-        for part in step.get("content", []):
-            if part.get("type") == "text":
-                content += part.get("text", "")
-
+    content = interaction.output_text
     parsed = _extract_json_payload(content)
 
     out: list[DrugCandidate] = []
@@ -281,7 +253,7 @@ def _call_llm(prompt: str) -> list[DrugCandidate]:
     """Dispatch to the correct call path based on the resolved provider."""
     config = _resolve_provider_config()
     if config["provider"] == "gemini":
-        return _call_gemini_interactions(prompt, config)
+        return _call_gemini_sdk(prompt, config)
     return _call_openai_compatible_chat(prompt)
 
 
