@@ -291,6 +291,10 @@ Rules:
 - Only propose drugs that appear or are strongly implied in the provided PubMed evidence.
 - Each "drug" field must be one specific molecule name.
 - Prioritise drugs already approved for another disease — they can be repurposed faster.
+- CRITICAL: Do NOT propose a drug whose "original_use" already IS (or is a synonym of)
+  the queried disease "{disease_query}" itself. A repurposing candidate must currently
+  be approved/indicated for a DIFFERENT disease than the one being queried — proposing
+  a drug already used to treat {disease_query} is not repurposing and must be excluded.
 - Set confidence lower if evidence is limited to 1 paper.
 - Return at most 8 candidates.
 """.strip()

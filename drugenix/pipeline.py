@@ -55,7 +55,9 @@ def run_pipeline(
     candidates = generate_candidates(disease_query=disease_query, docs=retrieved_docs)
 
     # Stage 4 - Validation Agent
-    validation_results = validate_candidates(candidates=candidates, docs=retrieved_docs)
+    validation_results = validate_candidates(
+        candidates=candidates, docs=retrieved_docs, disease_query=disease_query
+    )
     val_stats = validation_summary_stats(validation_results)
 
     # Stage 5 - Knowledge Graph validation

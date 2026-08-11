@@ -126,6 +126,28 @@ _STOPWORDS: frozenset[str] = frozenset({
     "have", "has", "had", "been", "were", "with", "from", "also", "both",
     "since", "while", "when", "where", "which", "what", "into", "onto",
     "more", "most", "some", "such", "only", "each", "other", "than",
+    # Common function words / connectives (frequent false positives from the
+    # heuristic fallback, which forces title-case on ANY matched word).
+    "against", "however", "therefore", "moreover", "furthermore",
+    "additionally", "although", "though", "because", "between", "during",
+    "without", "through", "before", "after", "further", "again", "once",
+    "here", "there", "why", "how", "all", "any", "few", "many", "much",
+    "same", "very", "just", "then", "now", "still", "yet", "even",
+    "over", "under", "above", "below", "within", "across", "among",
+    "toward", "towards", "despite", "regarding", "including", "include",
+    "included", "several", "various", "significant", "significantly",
+    "increased", "decreased", "reduced", "improved", "compared",
+    "group", "groups", "control", "controls", "week", "weeks", "month",
+    "months", "year", "years", "dose", "doses", "dosage",
+    "administration", "administered", "combination", "combined",
+    "single", "multiple", "primary", "secondary", "novel", "current",
+    "currently", "previous", "previously", "future", "possible",
+    "possibly", "likely", "unlikely", "does", "did", "doing", "done",
+    "using", "used", "use", "shown", "showed", "show", "found", "found",
+    "either", "neither", "whether", "unless", "until", "upon",
+    "thus", "hence", "overall", "notably", "importantly", "interestingly",
+    "first", "second", "third", "finally", "next", "last", "well",
+    "known", "unknown", "new", "old", "high", "low", "further",
     # Generic biomedical terms (not drug names)
     "disease", "disorder", "syndrome", "condition", "therapy", "treatment",
     "drug", "drugs", "agent", "agents", "compound", "compounds",
@@ -233,6 +255,36 @@ def _evidence_strength(pmids: list[str]) -> str:
     return "strong"
 
 
+# Words too generic to count as a meaningful disease-match when checking
+# whether a candidate is already indicated for the queried disease.
+_GENERIC_DISEASE_WORDS: frozenset[str] = frozenset({
+    "disease", "disorder", "syndrome", "type", "chronic", "acute",
+    "condition", "conditions", "cancer", "cancers", "investigational",
+    "various", "other", "related", "with", "and", "the", "for",
+})
+
+
+def _disease_tokens(text: str) -> set[str]:
+    """Extract significant, crudely-stemmed disease-name tokens from text."""
+    words = re.findall(r"[a-zA-Z]{4,}", text.lower())
+    return {w.rstrip("s") for w in words if w not in _GENERIC_DISEASE_WORDS}
+
+
+def _is_circular_candidate(original_use: str, disease_query: str) -> bool:
+    """
+    True if the candidate's current/original indication overlaps with the
+    disease being queried — i.e. it is already used for this disease, so
+    proposing it as a "repurposing" candidate is circular/invalid.
+    """
+    if not original_use or not disease_query:
+        return False
+    query_tokens = _disease_tokens(disease_query)
+    if not query_tokens:
+        return False
+    use_tokens = _disease_tokens(original_use)
+    return bool(query_tokens & use_tokens)
+
+
 def _dedup_candidates(candidates: list[DrugCandidate]) -> list[DrugCandidate]:
     """Remove near-duplicate drug names (case-insensitive, strip trailing 's')."""
     seen: dict[str, DrugCandidate] = {}
@@ -251,6 +303,7 @@ def validate_candidates(
     candidates: list[DrugCandidate],
     docs: list[EvidenceDoc],
     min_confidence: float = _CONFIDENCE_THRESHOLD_FAIL,
+    disease_query: str = "",
 ) -> list[ValidationResult]:
     """
     Validate a list of DrugCandidate objects produced by the Reasoning Agent.
@@ -263,6 +316,10 @@ def validate_candidates(
         Retrieved PubMed documents (needed for safety scanning).
     min_confidence : float
         Candidates below this threshold automatically receive FAIL status.
+    disease_query : str
+        The disease being queried. Used to reject candidates that are
+        already approved/indicated for this same disease (circular
+        "repurposing" suggestions).
 
     Returns
     -------
@@ -284,6 +341,19 @@ def validate_candidates(
         if not name_ok:
             warnings.append(f"'{candidate.drug}' does not resemble a recognised drug name.")
             adj_confidence *= 0.60
+
+        # ------------------------------------------------------------------
+        # Check 1b – Circular candidate (already indicated for this disease)
+        # ------------------------------------------------------------------
+        is_circular = _is_circular_candidate(candidate.original_use, disease_query)
+        checks["already_indicated_for_query"] = is_circular
+        if is_circular:
+            warnings.append(
+                f"'{candidate.drug}' appears to already be indicated for "
+                f"'{disease_query}' — not a valid repurposing candidate "
+                "(must currently be approved for a DIFFERENT disease)."
+            )
+            adj_confidence *= 0.30
 
         # ------------------------------------------------------------------
         # Check 2 – Evidence grounding (PMID count)
@@ -321,9 +391,11 @@ def validate_candidates(
         # ------------------------------------------------------------------
         # Determine status
         # ------------------------------------------------------------------
-        if not name_ok:
-            # Implausible name is always a hard FAIL — regardless of evidence.
-            # This handles heuristic-mode noise (common words extracted as candidates).
+        if not name_ok or is_circular:
+            # Implausible name, or a candidate that's circular (already
+            # indicated for the queried disease), is always a hard FAIL —
+            # regardless of evidence. Implausible names handle heuristic-mode
+            # noise (common words extracted as candidates).
             status = "FAIL"
         elif candidate.confidence < min_confidence:
             status = "FAIL"

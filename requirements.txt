@@ -1,0 +1,14 @@
+# Minimal production dependencies for the FastAPI backend.
+# This intentionally excludes heavy optional ML deps (spacy, chromadb,
+# sentence-transformers, pykeen, torch) so the app fits comfortably on
+# free-tier hosting (e.g. Render's 512MB free instances). Those features
+# (semantic reranking, transformer NER, KG embeddings) are all wrapped in
+# try/except in the code and degrade gracefully to simpler fallbacks when
+# the packages aren't installed — nothing crashes, they just get skipped.
+#
+# For full ML functionality on a bigger instance, use pyproject.toml instead:
+#   pip install -e ".[dev]"
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.0
+networkx>=3.2
