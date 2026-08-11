@@ -206,7 +206,12 @@ def _call_gemini_native(prompt: str, config: dict[str, str]) -> list[DrugCandida
     if not api_key or not model:
         return []
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+    # Pass the key as a query param (the original, most universally-supported
+    # Gemini auth method) rather than relying solely on a custom header.
+    url = (
+        f"https://generativelanguage.googleapis.com/v1beta/models/"
+        f"{model}:generateContent?key={api_key}"
+    )
     payload = {
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
         "generationConfig": {
@@ -218,15 +223,19 @@ def _call_gemini_native(prompt: str, config: dict[str, str]) -> list[DrugCandida
     req = urllib.request.Request(
         url=url,
         method="POST",
-        headers={
-            "Content-Type": "application/json",
-            "x-goog-api-key": api_key,
-        },
+        headers={"Content-Type": "application/json"},
         data=json.dumps(payload).encode("utf-8"),
     )
 
-    with urllib.request.urlopen(req, timeout=180) as response:
-        data = response.read().decode("utf-8")
+    try:
+        with urllib.request.urlopen(req, timeout=180) as response:
+            data = response.read().decode("utf-8")
+    except urllib.error.HTTPError as exc:
+        # Surface Google's actual error body (e.g. "API key not valid",
+        # "Generative Language API has not been used in project...") instead
+        # of a bare status code — this is what actually explains failures.
+        body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Gemini API error {exc.code}: {body}") from exc
 
     response_json = json.loads(data)
     content = response_json["candidates"][0]["content"]["parts"][0]["text"]
