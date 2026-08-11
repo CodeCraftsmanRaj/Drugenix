@@ -69,9 +69,11 @@ def _resolve_provider_config() -> dict[str, str]:
             "provider": "gemini",
             "api_key": os.getenv("GEMINI_API_KEY", "").strip(),
             "base_url": gemini_base,
-            # gemini-2.0-flash was shut down by Google on 2026-06-01; use the
-            # current stable model unless overridden via GEMINI_MODEL.
-            "model": os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
+            # gemini-2.0-flash was shut down 2026-06-01. Plain gemini-2.5-flash
+            # is restricted for newer accounts ("no longer available to new
+            # users" per Google's own error message) — gemini-2.5-flash-lite
+            # is what Google's current docs actually use for this endpoint.
+            "model": os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite"),
         }
 
     if provider == "ollama":
