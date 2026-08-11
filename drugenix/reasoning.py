@@ -57,16 +57,18 @@ def _resolve_provider_config() -> dict[str, str]:
         }
 
     if provider in {"gemini", "gemmini", "google"}:
-        # Gemini OpenAI-compatible endpoint.
+        # Gemini's OpenAI-compatible endpoint already has the correct path
+        # (".../v1beta/openai") and must NOT go through _normalize_base_url,
+        # which would append an extra "/v1" and produce a 404 — Gemini's
+        # base URL structure is different from OpenAI/Ollama's.
+        gemini_base = os.getenv(
+            "GEMINI_BASE_URL",
+            "https://generativelanguage.googleapis.com/v1beta/openai",
+        ).rstrip("/")
         return {
             "provider": "gemini",
             "api_key": os.getenv("GEMINI_API_KEY", "").strip(),
-            "base_url": _normalize_base_url(
-                os.getenv(
-                    "GEMINI_BASE_URL",
-                    "https://generativelanguage.googleapis.com/v1beta/openai",
-                )
-            ),
+            "base_url": gemini_base,
             # gemini-2.0-flash was shut down by Google on 2026-06-01; use the
             # current stable model unless overridden via GEMINI_MODEL.
             "model": os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
