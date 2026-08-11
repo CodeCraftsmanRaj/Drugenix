@@ -86,11 +86,46 @@ def health() -> dict:
 def run_query(req: QueryRequest) -> QueryResponse:
     import os
 
+    # Gemini model names Google has discontinued / restricted for new
+    # accounts during 2026. A stale frontend form field can keep re-sending
+    # one of these on every request — ignore them so the code's own current
+    # default (kept up to date in drugenix/reasoning.py) applies instead of
+    # silently reintroducing a dead model.
+    _DEAD_GEMINI_MODELS = {
+        "gemini-2.0-flash",
+        "gemini-2.0-flash-lite",
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+    }
+
     if req.provider:
         os.environ["LLM_PROVIDER"] = req.provider.strip().lower()
+
+    provider = (req.provider or os.getenv("LLM_PROVIDER", "openai")).strip().lower()
+
+    # Reset every per-provider model override on EVERY request, then only
+    # re-set the one for the active provider if a model was actually given
+    # this time. Render keeps one worker process alive across all requests
+    # (it doesn't restart per-request), so without this reset, a model typed
+    # into the form on one request would silently keep overriding every
+    # later request in that process's lifetime — including ones where the
+    # field was left blank. This was the actual root cause of the model
+    # override "sticking" no matter what the current request sent.
+    for _env_key in ("OLLAMA_MODEL", "OPENAI_MODEL", "GEMINI_MODEL", "LLM_MODEL"):
+        os.environ.pop(_env_key, None)
+
     if req.model:
-        provider = (req.provider or os.getenv("LLM_PROVIDER", "openai")).strip().lower()
-        if provider == "ollama":
+        is_dead_gemini_model = (
+            provider in {"gemini", "gemmini", "google"}
+            and req.model.strip().lower() in _DEAD_GEMINI_MODELS
+        )
+        if is_dead_gemini_model:
+            logger.warning(
+                "Ignoring discontinued Gemini model '%s' from request; "
+                "using current default instead.",
+                req.model,
+            )
+        elif provider == "ollama":
             os.environ["OLLAMA_MODEL"] = req.model
         elif provider in {"openai", "open-ai"}:
             os.environ["OPENAI_MODEL"] = req.model
