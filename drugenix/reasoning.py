@@ -69,11 +69,13 @@ def _resolve_provider_config() -> dict[str, str]:
             "provider": "gemini",
             "api_key": os.getenv("GEMINI_API_KEY", "").strip(),
             "base_url": gemini_base,
-            # gemini-2.0-flash was shut down 2026-06-01. Plain gemini-2.5-flash
-            # is restricted for newer accounts ("no longer available to new
-            # users" per Google's own error message) — gemini-2.5-flash-lite
-            # is what Google's current docs actually use for this endpoint.
-            "model": os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite"),
+            # Newer accounts are blocked from the classic generateContent
+            # endpoint entirely (confirmed via Google's own error: "no longer
+            # available to new users" for both gemini-2.5-flash and
+            # gemini-2.5-flash-lite). Must use the Interactions API instead —
+            # see _call_gemini_interactions. gemini-3.6-flash is the model
+            # used throughout Google's current Interactions API docs.
+            "model": os.getenv("GEMINI_MODEL", "gemini-3.6-flash"),
         }
 
     if provider == "ollama":
@@ -193,14 +195,17 @@ def _call_openai_compatible_chat(prompt: str) -> list[DrugCandidate]:
     return [c for c in out if c.drug]
 
 
-def _call_gemini_native(prompt: str, config: dict[str, str]) -> list[DrugCandidate]:
+def _call_gemini_interactions(prompt: str, config: dict[str, str]) -> list[DrugCandidate]:
     """
-    Call Gemini's native generateContent API instead of the OpenAI-compatible
-    shim. As of mid-2026 Google issues newer "AQ." format Auth keys from AI
-    Studio by default, and those keys are not reliably accepted by the
-    OpenAI-compatible endpoint's `Authorization: Bearer` auth path (it can
-    return 400/401/404 depending on account) — only the native endpoint with
-    an `x-goog-api-key` header is guaranteed to work for these keys.
+    Call Gemini via the Interactions API (v1beta2/interactions).
+
+    As of mid/late-2026, Google has fully migrated newer API keys/accounts
+    off the classic generateContent endpoint — both gemini-2.5-flash and
+    gemini-2.5-flash-lite return a hard 404 ("this model is no longer
+    available to new users") for accounts created after the cutover, and
+    Google's own docs point exclusively at the Interactions API as the
+    replacement. This is a different request/response shape entirely
+    (single "input" string in, a "steps" array out), not just a URL change.
     """
     api_key = config["api_key"]
     model = config["model"]
@@ -208,24 +213,28 @@ def _call_gemini_native(prompt: str, config: dict[str, str]) -> list[DrugCandida
     if not api_key or not model:
         return []
 
-    # Pass the key as a query param (the original, most universally-supported
-    # Gemini auth method) rather than relying solely on a custom header.
-    url = (
-        f"https://generativelanguage.googleapis.com/v1beta/models/"
-        f"{model}:generateContent?key={api_key}"
+    system_instruction = (
+        "You are a biomedical reasoning assistant. "
+        "Only propose drugs supported by provided evidence snippets. "
+        "Always return valid JSON only."
     )
+
+    url = "https://generativelanguage.googleapis.com/v1beta2/interactions"
     payload = {
-        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.2,
-            "responseMimeType": "application/json",
-        },
+        "model": model,
+        "input": f"{system_instruction}\n\n{prompt}",
+        "response_format": [
+            {"type": "text", "mime_type": "application/json"}
+        ],
     }
 
     req = urllib.request.Request(
         url=url,
         method="POST",
-        headers={"Content-Type": "application/json"},
+        headers={
+            "Content-Type": "application/json",
+            "x-goog-api-key": api_key,
+        },
         data=json.dumps(payload).encode("utf-8"),
     )
 
@@ -233,14 +242,21 @@ def _call_gemini_native(prompt: str, config: dict[str, str]) -> list[DrugCandida
         with urllib.request.urlopen(req, timeout=180) as response:
             data = response.read().decode("utf-8")
     except urllib.error.HTTPError as exc:
-        # Surface Google's actual error body (e.g. "API key not valid",
-        # "Generative Language API has not been used in project...") instead
-        # of a bare status code — this is what actually explains failures.
+        # Surface Google's actual error body instead of a bare status code —
+        # that's what actually explains failures, not the code alone.
         body = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"Gemini API error {exc.code}: {body}") from exc
+        raise RuntimeError(f"Gemini Interactions API error {exc.code}: {body}") from exc
 
     response_json = json.loads(data)
-    content = response_json["candidates"][0]["content"]["parts"][0]["text"]
+
+    content = ""
+    for step in response_json.get("steps", []):
+        if step.get("type") != "model_output":
+            continue
+        for part in step.get("content", []):
+            if part.get("type") == "text":
+                content += part.get("text", "")
+
     parsed = _extract_json_payload(content)
 
     out: list[DrugCandidate] = []
@@ -265,7 +281,7 @@ def _call_llm(prompt: str) -> list[DrugCandidate]:
     """Dispatch to the correct call path based on the resolved provider."""
     config = _resolve_provider_config()
     if config["provider"] == "gemini":
-        return _call_gemini_native(prompt, config)
+        return _call_gemini_interactions(prompt, config)
     return _call_openai_compatible_chat(prompt)
 
 
