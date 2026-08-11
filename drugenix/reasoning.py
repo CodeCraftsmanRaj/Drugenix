@@ -191,6 +191,73 @@ def _call_openai_compatible_chat(prompt: str) -> list[DrugCandidate]:
     return [c for c in out if c.drug]
 
 
+def _call_gemini_native(prompt: str, config: dict[str, str]) -> list[DrugCandidate]:
+    """
+    Call Gemini's native generateContent API instead of the OpenAI-compatible
+    shim. As of mid-2026 Google issues newer "AQ." format Auth keys from AI
+    Studio by default, and those keys are not reliably accepted by the
+    OpenAI-compatible endpoint's `Authorization: Bearer` auth path (it can
+    return 400/401/404 depending on account) — only the native endpoint with
+    an `x-goog-api-key` header is guaranteed to work for these keys.
+    """
+    api_key = config["api_key"]
+    model = config["model"]
+
+    if not api_key or not model:
+        return []
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+    payload = {
+        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "temperature": 0.2,
+            "responseMimeType": "application/json",
+        },
+    }
+
+    req = urllib.request.Request(
+        url=url,
+        method="POST",
+        headers={
+            "Content-Type": "application/json",
+            "x-goog-api-key": api_key,
+        },
+        data=json.dumps(payload).encode("utf-8"),
+    )
+
+    with urllib.request.urlopen(req, timeout=180) as response:
+        data = response.read().decode("utf-8")
+
+    response_json = json.loads(data)
+    content = response_json["candidates"][0]["content"]["parts"][0]["text"]
+    parsed = _extract_json_payload(content)
+
+    out: list[DrugCandidate] = []
+    for item in parsed.get("candidates", []):
+        raw_name = str(item.get("drug", "")).strip()
+        clean_name = re.sub(r"\s*\(.*?\)\s*$", "", raw_name).strip()
+        out.append(
+            DrugCandidate(
+                drug=clean_name,
+                mechanism=str(item.get("mechanism", "")).strip(),
+                confidence=float(item.get("confidence", 0.0)),
+                evidence_pmids=[str(p) for p in item.get("evidence_pmids", [])],
+                original_use=str(item.get("original_use", "")).strip(),
+                repurposing_rationale=str(item.get("repurposing_rationale", "")).strip(),
+            )
+        )
+
+    return [c for c in out if c.drug]
+
+
+def _call_llm(prompt: str) -> list[DrugCandidate]:
+    """Dispatch to the correct call path based on the resolved provider."""
+    config = _resolve_provider_config()
+    if config["provider"] == "gemini":
+        return _call_gemini_native(prompt, config)
+    return _call_openai_compatible_chat(prompt)
+
+
 def _groundedness_score(candidate: DrugCandidate, docs: list[EvidenceDoc]) -> float:
     evidence_pmids = set(candidate.evidence_pmids)
     if not evidence_pmids:
@@ -306,7 +373,7 @@ Rules:
     # Up to 2 LLM attempts; accept when groundedness is acceptable.
     for attempt in range(2):
         try:
-            llm_candidates = _call_openai_compatible_chat(prompt)
+            llm_candidates = _call_llm(prompt)
             if llm_candidates:
                 avg_groundedness = _average_groundedness(llm_candidates, docs)
                 if avg_groundedness >= 0.45 or attempt == 1:
