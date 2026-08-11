@@ -67,7 +67,9 @@ def _resolve_provider_config() -> dict[str, str]:
                     "https://generativelanguage.googleapis.com/v1beta/openai",
                 )
             ),
-            "model": os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
+            # gemini-2.0-flash was shut down by Google on 2026-06-01; use the
+            # current stable model unless overridden via GEMINI_MODEL.
+            "model": os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
         }
 
     if provider == "ollama":
