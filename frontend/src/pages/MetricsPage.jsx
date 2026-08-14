@@ -9,6 +9,7 @@ import {
   getMetrics, getComparativeEvaluation,
   getCaseStudies, getPredictBenchmark,
   getLinkPredictionStatus, getLinkPredictions, trainEmbeddings,
+  runBenchmark,
 } from "../api/client.js";
 import LoadingState from "../components/LoadingState.jsx";
 
@@ -146,15 +147,17 @@ function MetricBadge({ label, value, unit = "%", highlight = false }) {
   );
 }
 
-function RunBenchmarkBanner({ onRun, running }) {
+function RunBenchmarkBanner({ onRun, running, error }) {
   return (
     <div className="card" style={{ marginBottom: 20, background: "var(--bg-elevated)", borderLeft: "4px solid var(--primary)" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
         <div>
-          <div style={{ fontWeight: 700, marginBottom: 4 }}>No benchmark data yet</div>
+          <div style={{ fontWeight: 700, marginBottom: 4 }}>Benchmark data may be stale</div>
           <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>
-            Click "Run Benchmark" to evaluate the pipeline against the gold-standard drug-disease dataset
-            (FDA-approved + known repurposed drugs). Runs 3 variants across 5 diseases. Takes ~10 min with Ollama.
+            The numbers below are from the last benchmark run, not live from your current queries. Click
+            "Run Benchmark" to re-evaluate the pipeline against the gold-standard drug-disease dataset
+            (FDA-approved + known repurposed drugs) and refresh these numbers. Runs 3 variants across 5
+            diseases. Takes ~10 min with Ollama.
           </div>
         </div>
         <button
@@ -170,6 +173,11 @@ function RunBenchmarkBanner({ onRun, running }) {
         <div className="banner banner-info" style={{ marginTop: 12 }}>
           Benchmark started in background. This page will auto-refresh every 30s.
           Make sure Ollama is running (ollama serve).
+        </div>
+      )}
+      {error && (
+        <div className="banner banner-error" style={{ marginTop: 12 }}>
+          Could not start the benchmark: {error}
         </div>
       )}
     </div>
@@ -610,6 +618,7 @@ export default function MetricsPage() {
   const [compLoading, setCompLoading] = useState(true);
   const [error, setError] = useState(null);
   const [benchRunning, setBenchRunning] = useState(false);
+  const [benchError, setBenchError] = useState(null);
 
   function loadData() {
     getMetrics()
@@ -635,7 +644,19 @@ export default function MetricsPage() {
     if (!benchRunning) return;
     const id = setInterval(() => {
       getComparativeEvaluation()
-        .then((data) => { setCompEval(data); setBenchRunning(false); clearInterval(id); })
+        .then((data) => {
+          setCompEval(data);
+          setBenchRunning(false);
+          clearInterval(id);
+          // run_benchmark.py also regenerates metrics_drugenix_mvp.json
+          // (backs the "Retrieval & Generation Benchmark" section below),
+          // but this poll previously only re-fetched the comparative-
+          // evaluation data — that section was silently left showing
+          // whatever was loaded when the page first opened, even after a
+          // successful fresh run finished. Re-pull everything the
+          // benchmark script can change once it's done.
+          getMetrics().then(setMetrics).catch(() => {});
+        })
         .catch(() => {});
     }, 30000);
     return () => clearInterval(id);
@@ -643,7 +664,17 @@ export default function MetricsPage() {
 
   async function handleRunBenchmark() {
     setBenchRunning(true);
-    try { await fetch("/api/run-benchmark", { method: "POST" }); } catch {}
+    setBenchError(null);
+    try {
+      await runBenchmark();
+    } catch (e) {
+      // Previously this silently swallowed any failure (missing await'd
+      // error, wrong base URL hitting the frontend's own dev server
+      // instead of the backend) — the button would appear to do nothing
+      // with zero feedback. Surface it instead.
+      setBenchRunning(false);
+      setBenchError(e.message || "Failed to start benchmark run.");
+    }
   }
 
   const retrieval = metrics?.retrieval || {};
@@ -674,10 +705,16 @@ export default function MetricsPage() {
       {/* Comparative evaluation */}
       {compLoading ? (
         <LoadingState label="Loading evaluation data…" />
-      ) : compEval ? (
-        <ComparativeSection data={compEval} />
       ) : (
-        <RunBenchmarkBanner onRun={handleRunBenchmark} running={benchRunning} />
+        <>
+          {/* Previously this banner (and the only way to trigger a fresh
+              benchmark run) only rendered when compEval was completely
+              empty — since a benchmark file already exists from a prior
+              run, the refresh option was permanently hidden behind
+              already-stale data with no way to update it from the UI. */}
+          <RunBenchmarkBanner onRun={handleRunBenchmark} running={benchRunning} error={benchError} />
+          {compEval && <ComparativeSection data={compEval} />}
+        </>
       )}
 
       {/* Retrieval / generation benchmark charts */}

@@ -2,12 +2,22 @@
 Drugenix - Knowledge Graph Validation Layer
 =============================================
 Builds a drug-target-disease knowledge graph using:
-  - CTD (Comparative Toxicogenomics Database) open data
-  - Local curated relationships
+  - Open Targets Platform (live GraphQL API, queried per-disease on demand)
+    -- the primary source. Covers essentially any disease with genetic,
+    clinical, or chemical evidence (tens of thousands of EFO terms), so
+    this layer is NOT limited to a fixed list of diseases.
+  - ChEMBL data pre-fetched via scripts/fetch_chembl.py (data/chembl_kg.json)
+  - CTD (Comparative Toxicogenomics Database) open data (optional, opt-in)
+  - A small curated seed list (~80 hand-picked relationships) — kept only
+    as an offline fallback for when Open Targets is unreachable, e.g. no
+    network access.
   - NetworkX for graph operations
 
 Validates LLM-generated hypotheses by checking biological plausibility
-via known drug -> target -> disease paths in the graph.
+via known drug -> target -> disease paths in the graph. For any disease
+not already in the graph, ensure_live_disease_data() fetches it from
+Open Targets on first use and merges it in, so the KG effectively covers
+every disease Open Targets knows about, not just the curated seed set.
 """
 
 from __future__ import annotations
@@ -24,6 +34,7 @@ from typing import Optional
 
 import networkx as nx
 
+from drugenix import opentargets
 from drugenix.models import DrugCandidate, EvidenceDoc
 
 logger = logging.getLogger(__name__)
@@ -147,6 +158,11 @@ class DrugKnowledgeGraph:
     def __init__(self):
         self.graph = nx.DiGraph()
         self._loaded = False
+        # Diseases we've already pulled live Open Targets data for, so a
+        # process only ever makes one live call per unique disease term
+        # instead of re-fetching on every candidate validated against it.
+        self._live_fetched_diseases: set[str] = set()
+        self._opentargets_available = True
 
     def build(self, use_ctd: bool = False) -> None:
         """Build the knowledge graph from curated data + ChEMBL (if available)."""
@@ -212,6 +228,68 @@ class DrugKnowledgeGraph:
             logger.info("Loaded %d ChEMBL drug-disease pairs from %s", added, path.name)
         except Exception as e:
             logger.warning("Could not load ChEMBL data: %s", e)
+
+    def ensure_live_disease_data(self, disease_query: str) -> bool:
+        """
+        Pull live drug/target/disease evidence from Open Targets for this
+        specific disease and merge it into the graph, if not already done
+        this process. This is what makes the KG work for ANY disease —
+        not just the ~15 conditions in the curated seed list — without
+        having to pre-download the entire Open Targets dataset.
+
+        Returns True if live edges were merged (or already had been),
+        False if Open Targets had nothing / was unreachable (curated +
+        ChEMBL data, if any, still apply).
+        """
+        key = disease_query.strip().lower()
+        if not key:
+            return False
+        if key in self._live_fetched_diseases:
+            return True
+
+        if not self._opentargets_available:
+            return False
+
+        try:
+            edges = opentargets.get_disease_kg_edges(disease_query)
+        except Exception as e:
+            logger.info("Open Targets live lookup failed for '%s': %s", disease_query, e)
+            edges = []
+
+        if not edges:
+            self._live_fetched_diseases.add(key)
+            return False
+
+        disease_node = key
+        self.graph.add_node(disease_node, type="disease")
+
+        added = 0
+        for edge in edges:
+            drug = edge["drug"].strip().lower()
+            if not drug:
+                continue
+            self.graph.add_node(drug, type="drug")
+
+            self.graph.add_edge(
+                drug, disease_node,
+                relation="treats",
+                mechanism=edge.get("mechanism", ""),
+                evidence="OpenTargets",
+                is_approved=edge.get("is_approved", False),
+            )
+
+            target = edge.get("target", "")
+            if target and target != "UNKNOWN":
+                target_node = target.upper()[:20]
+                self.graph.add_node(target_node, type="target")
+                self.graph.add_edge(drug, target_node, relation="targets", mechanism=edge.get("mechanism", ""))
+                self.graph.add_edge(target_node, disease_node, relation="associated_with")
+
+            added += 1
+
+        self._live_fetched_diseases.add(key)
+        logger.info("Open Targets: merged %d live drug edges for '%s'", added, disease_query)
+        return added > 0
 
     def _add_curated_relationships(self) -> None:
         for rel in _CURATED_RELATIONSHIPS:
@@ -290,6 +368,7 @@ class DrugKnowledgeGraph:
         """Check if a drug-disease relationship has biological plausibility in the KG."""
         if not self._loaded:
             self.build()
+        self.ensure_live_disease_data(disease_query)
 
         drug_lower = drug_name.lower().strip()
         disease_lower = disease_query.lower().strip()
@@ -371,6 +450,7 @@ class DrugKnowledgeGraph:
         """Return drugs known to be associated with a disease."""
         if not self._loaded:
             self.build()
+        self.ensure_live_disease_data(disease_query)
 
         disease_lower = disease_query.lower().strip()
         drugs = []
@@ -402,6 +482,15 @@ class DrugKnowledgeGraph:
             if d.get("evidence") == "ChEMBL"
         )
         chembl_path = Path(__file__).parent.parent / "data" / "chembl_kg.json"
+        opentargets_edges = sum(
+            1 for _, _, d in self.graph.edges(data=True)
+            if d.get("evidence") == "OpenTargets"
+        )
+        sources = ["Curated (manual, offline fallback)"]
+        if chembl_path.exists():
+            sources.append("ChEMBL")
+        if opentargets_edges:
+            sources.append("Open Targets (live)")
         return {
             "total_nodes": self.graph.number_of_nodes(),
             "total_edges": self.graph.number_of_edges(),
@@ -410,13 +499,16 @@ class DrugKnowledgeGraph:
             "diseases": disease_count,
             "chembl_edges": chembl_edges,
             "chembl_loaded": chembl_path.exists(),
-            "sources": ["Curated (manual)", "ChEMBL"] if chembl_path.exists() else ["Curated (manual)"],
+            "opentargets_edges": opentargets_edges,
+            "opentargets_diseases_fetched": sorted(self._live_fetched_diseases),
+            "sources": sources,
         }
 
     def get_subgraph_for_disease(self, disease_query: str, max_hops: int = 2) -> dict:
         """Return a subgraph around a disease for visualization."""
         if not self._loaded:
             self.build()
+        self.ensure_live_disease_data(disease_query)
 
         disease_lower = disease_query.lower().strip()
         disease_node = None

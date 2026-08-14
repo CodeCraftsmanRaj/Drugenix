@@ -4,27 +4,40 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 from collections import defaultdict
 
 from drugenix.models import DrugCandidate, EvidenceDoc
-
-_DRUG_SUFFIXES = (
-    "mab",
-    "nib",
-    "ciclib",
-    "parib",
-    "sartan",
-    "pril",
-    "oxetine",
-    "azole",
-    "avir",
-    "mycin",
-)
+from drugenix.ner_extraction import _is_drug_like as _is_known_drug_name
 
 _CANDIDATE_RE = re.compile(r"\b([A-Za-z][A-Za-z0-9\-]{2,})\b")
 _DRUG_KEYWORDS = ("inhibitor", "agonist", "antagonist", "activator", "blocker", "therapy", "treatment", "drug", "agent", "compound", "receptor", "target")
+
+# Gemini's free tier returns a 429 with a "Please retry in N.NNs" hint when
+# its per-window request quota is exhausted — a real, expected occurrence
+# under normal research usage (a single symptom query alone can fire several
+# LLM calls). Retry once if the suggested wait is short enough to be worth
+# blocking a live request for; otherwise fail fast with a clear error rather
+# than stalling the UI for an unknown/long amount of time.
+_GEMINI_RATE_LIMIT_RETRY_PATTERN = re.compile(r"retry in\s+([\d.]+)\s*s", re.IGNORECASE)
+_GEMINI_MAX_RETRY_WAIT_SECONDS = 20.0
+
+
+def _is_rate_limit_error(message: str) -> bool:
+    lower = message.lower()
+    return "429" in message or "resource_exhausted" in lower or "quota" in lower or "rate limit" in lower
+
+
+def _extract_retry_delay_seconds(message: str) -> float | None:
+    match = _GEMINI_RATE_LIMIT_RETRY_PATTERN.search(message)
+    if not match:
+        return None
+    try:
+        return float(match.group(1))
+    except ValueError:
+        return None
 
 
 def _normalize_base_url(url: str) -> str:
@@ -109,31 +122,38 @@ def _extract_json_payload(content: str) -> dict:
     return {}
 
 
-def _call_openai_compatible_chat(prompt: str) -> list[DrugCandidate]:
+_DEFAULT_SYSTEM_PROMPT = (
+    "You are a biomedical reasoning assistant. "
+    "Only make claims supported by the provided evidence. "
+    "Always return valid JSON only."
+)
+
+
+def _chat_openai_compatible(prompt: str, system_prompt: str = _DEFAULT_SYSTEM_PROMPT) -> dict:
+    """
+    Low-level call to any OpenAI-compatible chat/completions endpoint
+    (OpenAI, Ollama, OpenRouter, Groq, Together, ...). Returns the raw
+    parsed JSON object the model produced (whatever top-level keys the
+    prompt asked for) — callers decide how to interpret it. Returns {}
+    if the provider isn't configured or the call fails.
+    """
     config = _resolve_provider_config()
     api_key = config["api_key"]
     base_url = config["base_url"]
     model = config["model"]
 
     if not base_url or not model:
-        return []
+        return {}
 
     # For local Ollama in default config, key is optional; for hosted APIs key is usually required.
     if config["provider"] != "ollama" and not api_key:
-        return []
+        return {}
 
     payload = {
         "model": model,
         "temperature": 0.2,
         "messages": [
-            {
-                "role": "system",
-                "content": (
-                    "You are a biomedical reasoning assistant. "
-                    "Only propose drugs supported by provided evidence snippets. "
-                    "Always return valid JSON only."
-                ),
-            },
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt},
         ],
     }
@@ -174,8 +194,81 @@ def _call_openai_compatible_chat(prompt: str) -> list[DrugCandidate]:
 
     response_json = json.loads(data)
     content = response_json["choices"][0]["message"]["content"]
-    parsed = _extract_json_payload(content)
+    return _extract_json_payload(content)
 
+
+def _chat_gemini_sdk(prompt: str, config: dict[str, str], system_prompt: str = _DEFAULT_SYSTEM_PROMPT) -> dict:
+    """
+    Low-level call to Gemini via Google's official `google-genai` SDK
+    rather than hand-rolled HTTP calls.
+
+    Google has changed the Gemini HTTP surface repeatedly through 2026 (key
+    format AIza -> AQ., generateContent being restricted for newer accounts,
+    the new Interactions API) and hand-matching each change via raw urllib
+    calls is fragile — the SDK is maintained by Google specifically to
+    absorb these changes so callers don't have to track them.
+
+    Returns the raw parsed JSON object; {} if not configured / call fails.
+    """
+    api_key = config["api_key"]
+    model = config["model"]
+
+    if not api_key or not model:
+        return {}
+
+    from google import genai  # local import: optional dependency
+
+    client = genai.Client(api_key=api_key)
+
+    last_exc: Exception | None = None
+    for attempt in range(2):
+        try:
+            interaction = client.interactions.create(
+                model=model,
+                input=f"{system_prompt}\n\n{prompt}",
+                response_format=[{"type": "text", "mime_type": "application/json"}],
+            )
+            content = interaction.output_text
+            return _extract_json_payload(content)
+        except Exception as exc:
+            last_exc = exc
+            message = str(exc)
+            if attempt >= 1 or not _is_rate_limit_error(message):
+                raise
+            delay = _extract_retry_delay_seconds(message)
+            if delay is None or delay > _GEMINI_MAX_RETRY_WAIT_SECONDS:
+                # Either couldn't parse a wait time, or it's long enough that
+                # blocking this request for it isn't worth it — fail fast
+                # with the real error instead (already surfaced to the user
+                # via generate_candidates_with_meta / interpret_symptoms_with_meta).
+                raise
+            print(
+                f"[Drugenix] Gemini rate-limited, retrying once in {delay:.1f}s",
+                file=sys.stderr,
+            )
+            time.sleep(delay + 0.5)
+
+    raise last_exc  # pragma: no cover - loop always returns or raises above
+
+
+def chat_completion_json(prompt: str, system_prompt: str = _DEFAULT_SYSTEM_PROMPT) -> dict:
+    """
+    Reusable entry point: dispatch to whichever LLM provider is configured
+    (LLM_PROVIDER env var: openai | gemini | ollama | custom) and return
+    the raw parsed JSON response. Any module in Drugenix that needs a
+    live LLM call (candidate reasoning, symptom interpretation, mechanism
+    -similarity fallback, ...) should go through this instead of hitting
+    a provider's SDK/HTTP API directly, so provider config only lives in
+    one place. Returns {} on any failure — callers should treat that as
+    "no LLM available" and fall back to a deterministic heuristic.
+    """
+    config = _resolve_provider_config()
+    if config["provider"] == "gemini":
+        return _chat_gemini_sdk(prompt, config, system_prompt)
+    return _chat_openai_compatible(prompt, system_prompt)
+
+
+def _parse_candidates_json(parsed: dict) -> list[DrugCandidate]:
     out: list[DrugCandidate] = []
     for item in parsed.get("candidates", []):
         raw_name = str(item.get("drug", "")).strip()
@@ -191,70 +284,13 @@ def _call_openai_compatible_chat(prompt: str) -> list[DrugCandidate]:
                 repurposing_rationale=str(item.get("repurposing_rationale", "")).strip(),
             )
         )
-
-    return [c for c in out if c.drug]
-
-
-def _call_gemini_sdk(prompt: str, config: dict[str, str]) -> list[DrugCandidate]:
-    """
-    Call Gemini via Google's official `google-genai` SDK rather than
-    hand-rolled HTTP calls.
-
-    Google has changed the Gemini HTTP surface repeatedly through 2026 (key
-    format AIza -> AQ., generateContent being restricted for newer accounts,
-    the new Interactions API) and hand-matching each change via raw urllib
-    calls is fragile — the SDK is maintained by Google specifically to
-    absorb these changes so callers don't have to track them.
-    """
-    api_key = config["api_key"]
-    model = config["model"]
-
-    if not api_key or not model:
-        return []
-
-    from google import genai  # local import: optional dependency
-
-    client = genai.Client(api_key=api_key)
-
-    system_instruction = (
-        "You are a biomedical reasoning assistant. "
-        "Only propose drugs supported by provided evidence snippets. "
-        "Always return valid JSON only."
-    )
-
-    interaction = client.interactions.create(
-        model=model,
-        input=f"{system_instruction}\n\n{prompt}",
-        response_format=[{"type": "text", "mime_type": "application/json"}],
-    )
-
-    content = interaction.output_text
-    parsed = _extract_json_payload(content)
-
-    out: list[DrugCandidate] = []
-    for item in parsed.get("candidates", []):
-        raw_name = str(item.get("drug", "")).strip()
-        clean_name = re.sub(r"\s*\(.*?\)\s*$", "", raw_name).strip()
-        out.append(
-            DrugCandidate(
-                drug=clean_name,
-                mechanism=str(item.get("mechanism", "")).strip(),
-                confidence=float(item.get("confidence", 0.0)),
-                evidence_pmids=[str(p) for p in item.get("evidence_pmids", [])],
-                original_use=str(item.get("original_use", "")).strip(),
-                repurposing_rationale=str(item.get("repurposing_rationale", "")).strip(),
-            )
-        )
-
     return [c for c in out if c.drug]
 
 
 def _call_llm(prompt: str) -> list[DrugCandidate]:
-    """Dispatch to the correct call path based on the resolved provider."""
-    config = _resolve_provider_config()
-    if config["provider"] == "gemini":
-        return _call_gemini_sdk(prompt, config)
-    return _call_openai_compatible_chat(prompt)
+    """Dispatch to the correct call path and parse the response as drug candidates."""
+    parsed = chat_completion_json(prompt)
+    return _parse_candidates_json(parsed)
 
 
 def _groundedness_score(candidate: DrugCandidate, docs: list[EvidenceDoc]) -> float:
@@ -283,6 +319,18 @@ def _average_groundedness(candidates: list[DrugCandidate], docs: list[EvidenceDo
 
 
 def _heuristic_reason(docs: list[EvidenceDoc]) -> list[DrugCandidate]:
+    """
+    Deterministic fallback used ONLY when no LLM provider is configured or
+    the LLM call failed. Deliberately conservative: a token is only
+    accepted as a candidate drug name if it matches the curated known-drug
+    dictionary, a recognised WHO INN suffix, or a research-compound code
+    pattern (same gate drugenix.ner_extraction uses for NER) — not just
+    "any capitalized word near a drug-context keyword". That looser check
+    used to let generic English words like "Cholinesterase", "Effective",
+    or "Outcomes" through as fake drug names, which is exactly the kind of
+    silent-garbage failure mode that's unacceptable for a tool researchers
+    are actually relying on.
+    """
     drug_candidates_by_pmid: dict[str, list[tuple[str, str]]] = defaultdict(list)
 
     for doc in docs:
@@ -297,9 +345,8 @@ def _heuristic_reason(docs: list[EvidenceDoc]) -> list[DrugCandidate]:
 
             for match in _CANDIDATE_RE.finditer(sentence):
                 token = match.group(1)
-                lower = token.lower()
 
-                if any(lower.endswith(sfx) for sfx in _DRUG_SUFFIXES) or (has_drug_context and len(token) > 3):
+                if _is_known_drug_name(token):
                     name = token[0].upper() + token[1:]
                     if name not in [x[0] for x in drug_candidates_by_pmid[doc.pmid]]:
                         drug_candidates_by_pmid[doc.pmid].append((name, sentence[:250]))
@@ -331,6 +378,22 @@ def _heuristic_reason(docs: list[EvidenceDoc]) -> list[DrugCandidate]:
 
 
 def generate_candidates(disease_query: str, docs: list[EvidenceDoc]) -> list[DrugCandidate]:
+    """Back-compat entry point (used by scripts/comparative_evaluation.py etc). See generate_candidates_with_meta."""
+    candidates, _meta = generate_candidates_with_meta(disease_query, docs)
+    return candidates
+
+
+def generate_candidates_with_meta(
+    disease_query: str, docs: list[EvidenceDoc]
+) -> tuple[list[DrugCandidate], dict]:
+    """
+    Same as generate_candidates, but also returns a metadata dict a caller
+    can surface to the user: {"reasoning_mode": "llm" | "heuristic",
+    "llm_error": str | None}. Knowing whether a result actually came from
+    the configured LLM or silently fell back to the much weaker heuristic
+    extractor is exactly the kind of thing a researcher needs to see, not
+    just a server-side log line.
+    """
     context = _build_context_snippets(docs)
     prompt = f"""
 Disease query: {disease_query}
@@ -369,6 +432,9 @@ Rules:
 - Return at most 8 candidates.
 """.strip()
 
+    provider = _resolve_provider_config()["provider"]
+    llm_error: str | None = None
+
     # Up to 2 LLM attempts; accept when groundedness is acceptable.
     for attempt in range(2):
         try:
@@ -376,24 +442,23 @@ Rules:
             if llm_candidates:
                 avg_groundedness = _average_groundedness(llm_candidates, docs)
                 if avg_groundedness >= 0.45 or attempt == 1:
-                    return llm_candidates
+                    return llm_candidates, {"reasoning_mode": "llm", "llm_provider": provider, "llm_error": None}
 
                 prompt += "\n\nImportant retry instruction: improve groundedness. Cite only PMIDs present in snippets and use wording directly supported by those snippets."
             else:
-                print(
-                    f"[Drugenix] LLM returned no candidates (provider={_resolve_provider_config()['provider']}); "
-                    "falling back to heuristic extraction.",
-                    file=sys.stderr,
-                )
+                llm_error = f"LLM ({provider}) returned no candidates — not configured, no API key, or empty response."
+                print(f"[Drugenix] {llm_error} Falling back to heuristic extraction.", file=sys.stderr)
         except Exception as exc:
             # Graceful fallback to deterministic heuristic reasoning, but tell the
             # user why — silent fallback makes "no LLM configured" indistinguishable
             # from "LLM call failed" (timeout, bad model name, server down, etc).
-            print(
-                f"[Drugenix] LLM call failed ({type(exc).__name__}: {exc}); "
-                "falling back to heuristic extraction.",
-                file=sys.stderr,
-            )
+            llm_error = f"LLM ({provider}) call failed: {type(exc).__name__}: {exc}"
+            print(f"[Drugenix] {llm_error} Falling back to heuristic extraction.", file=sys.stderr)
             break
 
-    return _heuristic_reason(docs)
+    heuristic_candidates = _heuristic_reason(docs)
+    return heuristic_candidates, {
+        "reasoning_mode": "heuristic",
+        "llm_provider": provider,
+        "llm_error": llm_error or f"LLM ({provider}) not configured or unavailable.",
+    }

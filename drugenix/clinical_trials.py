@@ -21,10 +21,18 @@ CT_BASE = "https://clinicaltrials.gov/api/v2/studies"
 _cache: dict[str, list] = {}
 
 
-def search_trials(drug: str, disease: str, max_results: int = 3, timeout: int = 8) -> list[dict]:
+def search_trials(drug: str, disease: str, max_results: int = 3, timeout: int = 8) -> Optional[list[dict]]:
     """
     Search ClinicalTrials.gov for trials involving this drug + disease pair.
-    Returns list of trial summaries (NCT ID, title, phase, status).
+    Returns list of trial summaries (NCT ID, title, phase, status), or an
+    empty list if the query succeeded but genuinely found none.
+
+    Returns None (not []) when the API call itself failed (network error,
+    timeout, malformed response) — this is a distinct outcome from "zero
+    trials exist" and callers should not treat the two the same way. For a
+    clinical-trial-shortlisting tool, silently rendering "no trials" for a
+    drug that actually has Phase 3 data — just because ClinicalTrials.gov
+    timed out — is a correctness bug, not a cosmetic one.
     """
     cache_key = f"{drug.lower()}::{disease.lower()}"
     if cache_key in _cache:
@@ -45,7 +53,7 @@ def search_trials(drug: str, disease: str, max_results: int = 3, timeout: int = 
             data = json.loads(resp.read())
     except Exception as e:
         logger.debug("ClinicalTrials lookup failed for %s / %s: %s", drug, disease, e)
-        return []
+        return None
 
     studies = data.get("studies", [])
     results = []
@@ -85,6 +93,109 @@ def search_trials(drug: str, disease: str, max_results: int = 3, timeout: int = 
     return results
 
 
+def get_trial_result_outcome(nct_id: str, timeout: int = 10) -> Optional[dict]:
+    """
+    Best-effort fetch of a completed trial's PRIMARY outcome measure result,
+    to distinguish "trial completed and worked" from "trial completed and
+    failed" — ClinicalTrials.gov's overallStatus alone can't tell the two
+    apart; both are simply "COMPLETED" (this is the case that slipped past
+    the status-only check: Riluzole/Huntington's and Zolbetuximab/pancreatic
+    cancer both ran their full-length trials and reported negative primary
+    endpoints, neither trial was stopped early).
+
+    Returns None if the API call itself fails. Otherwise returns a dict —
+    this is a best-effort heuristic reading of messy, inconsistently
+    structured real-world trial data, NOT a guaranteed-accurate outcome
+    classifier. Always show the NCT ID/link alongside whatever this returns
+    so a researcher can verify directly rather than trusting an automated
+    significant/non-significant label blindly.
+
+    Returns
+    -------
+    dict | None
+        {
+          "has_results": bool,
+          "primary_outcome_title": str,
+          "primary_outcome_significant": bool | None,  # None = couldn't determine
+          "p_value": str | None,
+        }
+    """
+    if not nct_id:
+        return None
+
+    url = f"{CT_BASE}/{nct_id}?format=json"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Drugenix/1.0"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            data = json.loads(resp.read())
+    except Exception as e:
+        logger.debug("ClinicalTrials result fetch failed for %s: %s", nct_id, e)
+        return None
+
+    has_results = bool(data.get("hasResults", False))
+    if not has_results:
+        return {
+            "has_results": False,
+            "primary_outcome_title": "",
+            "primary_outcome_significant": None,
+            "p_value": None,
+        }
+
+    try:
+        results_section = data.get("resultsSection", {}) or {}
+        outcome_module = results_section.get("outcomeMeasuresModule", {}) or {}
+        outcomes = outcome_module.get("outcomeMeasures", []) or []
+        primary = next((o for o in outcomes if o.get("type") == "PRIMARY"), None)
+        if primary is None and outcomes:
+            primary = outcomes[0]
+        if primary is None:
+            return {
+                "has_results": True,
+                "primary_outcome_title": "",
+                "primary_outcome_significant": None,
+                "p_value": None,
+            }
+
+        title = primary.get("title", "")
+        significant: Optional[bool] = None
+        p_value_str: Optional[str] = None
+
+        for analysis in (primary.get("analyses", []) or []):
+            p_val = analysis.get("pValue")
+            if not p_val:
+                continue
+            p_value_str = str(p_val)
+            # p-values arrive as strings like "0.045", "<0.001", "P=0.24",
+            # ">0.99" — strip comparison/label characters before parsing.
+            # If it's an inequality like "<0.001" the true value could be
+            # even smaller/larger than what we parse, but the direction
+            # (significant vs not) is still reliable across that edge case.
+            cleaned = (
+                p_value_str.replace("<", "").replace(">", "")
+                .replace("=", "").replace("P", "").replace("p", "").strip()
+            )
+            try:
+                significant = float(cleaned) < 0.05
+            except ValueError:
+                pass
+            break  # only the first analysis on the primary outcome
+
+        return {
+            "has_results": True,
+            "primary_outcome_title": title,
+            "primary_outcome_significant": significant,
+            "p_value": p_value_str,
+        }
+    except Exception as e:
+        logger.debug("Failed to parse results section for %s: %s", nct_id, e)
+        return {
+            "has_results": True,
+            "primary_outcome_title": "",
+            "primary_outcome_significant": None,
+            "p_value": None,
+        }
+
+
 def get_highest_phase(trials: list[dict]) -> Optional[str]:
     """Return the highest clinical trial phase found among a list of trials."""
     phase_order = {
@@ -117,6 +228,8 @@ def enrich_candidates_with_trials(
     def _fetch(candidate: dict) -> dict:
         drug = candidate.get("drug", "")
         trials = search_trials(drug, disease)
+        lookup_failed = trials is None
+        trials = trials or []
         highest = get_highest_phase(trials)
         return {
             "drug": drug,
@@ -124,6 +237,7 @@ def enrich_candidates_with_trials(
             "trial_count": len(trials),
             "highest_phase": highest,
             "has_trials": len(trials) > 0,
+            "lookup_failed": lookup_failed,
         }
 
     drug_to_trials = {}

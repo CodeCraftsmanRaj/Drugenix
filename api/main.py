@@ -6,6 +6,7 @@ REST API wrapping the full agentic pipeline:
 
 Endpoints:
   POST /api/query              - run a full pipeline query (handles multi-disease via Planner)
+  POST /api/symptom-query       - interpret symptoms -> candidate conditions -> full pipeline
   GET  /api/history             - list past queries
   GET  /api/history/{query_id}  - get a specific past result
   DELETE /api/history/{query_id} - delete a past result
@@ -37,8 +38,9 @@ from api.storage import (
     get_query_result,
     save_query_result,
 )
+from drugenix.combinations import suggest_combinations
 from drugenix.knowledge_graph import get_knowledge_graph
-from drugenix.pipeline import run_pipeline
+from drugenix.pipeline import run_pipeline, run_symptom_pipeline
 from drugenix.planner import create_plan, execute_plan
 
 logging.basicConfig(level=logging.INFO)
@@ -77,13 +79,48 @@ class QueryResponse(BaseModel):
     result: dict
 
 
+class SymptomQueryRequest(BaseModel):
+    symptoms: str = Field(..., min_length=3, description="Free-text symptom description.")
+    top_conditions: int = Field(2, ge=1, le=5, description="How many candidate conditions to run the full pipeline for.")
+    retmax: int = Field(40, ge=5, le=200)
+    top_k: int = Field(8, ge=3, le=30)
+    provider: Optional[str] = Field(None, description="LLM provider override: openai | gemini | ollama | custom")
+    model: Optional[str] = None
+    use_semantic_retrieval: bool = True
+    use_ner: bool = True
+    use_kg: bool = True
+    save_to_history: bool = True
+
+
 @app.get("/api/health")
 def health() -> dict:
     return {"status": "ok", "service": "drugenix-api", "version": "0.2.0"}
 
 
-@app.post("/api/query", response_model=QueryResponse)
-def run_query(req: QueryRequest) -> QueryResponse:
+def _attach_combinations(result: dict) -> None:
+    """
+    Shared by /api/query and /api/symptom-query: add a "combinations" key
+    with the top suggested 2-drug pairings, computed from whatever the
+    final ranked candidate list is (works the same whether that list came
+    from a single disease, a multi-disease Planner merge, or a symptom
+    query's grounded conditions — they all converge on the same
+    aggregation.recommended/review_needed shape by this point).
+    """
+    agg = result.get("aggregation", {})
+    pool = (agg.get("recommended") or []) + (agg.get("review_needed") or [])
+    try:
+        result["combinations"] = suggest_combinations(pool)
+    except Exception as e:
+        logger.warning("Combination suggestion failed: %s", e)
+        result["combinations"] = []
+
+
+def _apply_llm_overrides(provider: Optional[str], model: Optional[str]) -> None:
+    """
+    Shared by /api/query and /api/symptom-query: apply a per-request LLM
+    provider/model override via env vars (reasoning.py reads its config
+    from the environment on every call).
+    """
     import os
 
     # Gemini model names Google has discontinued / restricted for new
@@ -98,10 +135,10 @@ def run_query(req: QueryRequest) -> QueryResponse:
         "gemini-2.5-flash-lite",
     }
 
-    if req.provider:
-        os.environ["LLM_PROVIDER"] = req.provider.strip().lower()
+    if provider:
+        os.environ["LLM_PROVIDER"] = provider.strip().lower()
 
-    provider = (req.provider or os.getenv("LLM_PROVIDER", "openai")).strip().lower()
+    resolved_provider = (provider or os.getenv("LLM_PROVIDER", "openai")).strip().lower()
 
     # Reset every per-provider model override on EVERY request, then only
     # re-set the one for the active provider if a model was actually given
@@ -114,25 +151,30 @@ def run_query(req: QueryRequest) -> QueryResponse:
     for _env_key in ("OLLAMA_MODEL", "OPENAI_MODEL", "GEMINI_MODEL", "LLM_MODEL"):
         os.environ.pop(_env_key, None)
 
-    if req.model:
+    if model:
         is_dead_gemini_model = (
-            provider in {"gemini", "gemmini", "google"}
-            and req.model.strip().lower() in _DEAD_GEMINI_MODELS
+            resolved_provider in {"gemini", "gemmini", "google"}
+            and model.strip().lower() in _DEAD_GEMINI_MODELS
         )
         if is_dead_gemini_model:
             logger.warning(
                 "Ignoring discontinued Gemini model '%s' from request; "
                 "using current default instead.",
-                req.model,
+                model,
             )
-        elif provider == "ollama":
-            os.environ["OLLAMA_MODEL"] = req.model
-        elif provider in {"openai", "open-ai"}:
-            os.environ["OPENAI_MODEL"] = req.model
-        elif provider in {"gemini", "gemmini", "google"}:
-            os.environ["GEMINI_MODEL"] = req.model
+        elif resolved_provider == "ollama":
+            os.environ["OLLAMA_MODEL"] = model
+        elif resolved_provider in {"openai", "open-ai"}:
+            os.environ["OPENAI_MODEL"] = model
+        elif resolved_provider in {"gemini", "gemmini", "google"}:
+            os.environ["GEMINI_MODEL"] = model
         else:
-            os.environ["LLM_MODEL"] = req.model
+            os.environ["LLM_MODEL"] = model
+
+
+@app.post("/api/query", response_model=QueryResponse)
+def run_query(req: QueryRequest) -> QueryResponse:
+    _apply_llm_overrides(req.provider, req.model)
 
     start = time.time()
 
@@ -166,12 +208,51 @@ def run_query(req: QueryRequest) -> QueryResponse:
         logger.exception("Pipeline execution failed")
         raise HTTPException(status_code=500, detail=f"Pipeline error: {e}")
 
+    _attach_combinations(result)
     elapsed = time.time() - start
 
     query_id = None
     if req.save_to_history:
         try:
             query_id = save_query_result(req.query, result)
+        except Exception as e:
+            logger.warning("Could not save to history: %s", e)
+
+    return QueryResponse(query_id=query_id, elapsed_seconds=round(elapsed, 2), result=result)
+
+
+@app.post("/api/symptom-query", response_model=QueryResponse)
+def run_symptom_query(req: SymptomQueryRequest) -> QueryResponse:
+    """
+    Symptom -> drug-repurposing candidates. Interprets free-text symptoms
+    into candidate conditions (LLM + live PubMed grounding), then runs the
+    full pipeline for the top-ranked condition(s). Not a diagnostic tool —
+    see result["symptom_analysis"]["disclaimer"].
+    """
+    _apply_llm_overrides(req.provider, req.model)
+
+    start = time.time()
+    try:
+        result = run_symptom_pipeline(
+            symptom_text=req.symptoms,
+            top_conditions=req.top_conditions,
+            retmax=req.retmax,
+            top_k=req.top_k,
+            use_semantic_retrieval=req.use_semantic_retrieval,
+            use_ner=req.use_ner,
+            use_kg=req.use_kg,
+        )
+    except Exception as e:
+        logger.exception("Symptom pipeline execution failed")
+        raise HTTPException(status_code=500, detail=f"Symptom pipeline error: {e}")
+
+    _attach_combinations(result)
+    elapsed = time.time() - start
+
+    query_id = None
+    if req.save_to_history:
+        try:
+            query_id = save_query_result(f"[symptoms] {req.symptoms}", result)
         except Exception as e:
             logger.warning("Could not save to history: %s", e)
 
@@ -299,6 +380,8 @@ def get_clinical_trials(drug: str, disease: str = "", limit: int = 3) -> dict:
     """Return ClinicalTrials.gov results for a drug (optionally filtered by disease)."""
     from drugenix.clinical_trials import search_trials, get_highest_phase
     trials = search_trials(drug, disease, max_results=limit)
+    lookup_failed = trials is None
+    trials = trials or []
     return {
         "drug": drug,
         "disease": disease,
@@ -306,6 +389,7 @@ def get_clinical_trials(drug: str, disease: str = "", limit: int = 3) -> dict:
         "trial_count": len(trials),
         "highest_phase": get_highest_phase(trials),
         "has_trials": len(trials) > 0,
+        "lookup_failed": lookup_failed,
     }
 
 

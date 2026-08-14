@@ -3,6 +3,40 @@
 **Agentic AI System for Accelerated Drug Repurposing**
 Autonomous Multi-Agent System for Explainable Biomedical Reasoning
 
+## 0. What's new: real-time, disease-agnostic, symptom-aware
+
+Four additions on top of the architecture described below:
+
+- **Live knowledge graph, any disease.** `drugenix/opentargets.py` queries the
+  Open Targets Platform GraphQL API per-disease at request time (no API key,
+  covers essentially any disease/phenotype in the EFO ontology). This is now
+  the primary source `knowledge_graph.py` uses; the ~80-relationship curated
+  seed list and pre-fetched ChEMBL dump are kept only as an offline fallback
+  if Open Targets is unreachable. Nothing in the live query path is limited
+  to a fixed disease list.
+- **Symptom input mode.** `POST /api/symptom-query` (backed by
+  `drugenix/symptom_reasoning.py`) lets a user describe symptoms instead of
+  naming a disease. An LLM proposes ranked candidate conditions, each
+  grounded against a live PubMed search before being handed to the normal
+  pipeline. Explicitly a research-hypothesis tool, not a diagnostic one —
+  every response carries `symptom_analysis.disclaimer`.
+- **Mechanism-similarity fallback for new/rare diseases.**
+  `drugenix/mechanism_fallback.py` triggers when PubMed literature for a
+  query is thin (a genuinely new or very rare disease may have little to no
+  published literature yet). It proposes drugs via shared molecular-target
+  overlap with related diseases (using Open Targets' genetic/clinical
+  association data, which exists independent of literature), tagged
+  `evidence_tier="mechanistic"` end-to-end so these are never confused with
+  literature-backed candidates — capped confidence, separate UI badge,
+  excluded from the "zero PMIDs = hallucination" check.
+- **Research-grade metrics.** `drugenix/evaluation.py` now reports bootstrap
+  95% confidence intervals and sample size (`n`) alongside every aggregate
+  metric. Each ranked candidate in a pipeline result also carries a live
+  `groundedness` score (fraction of its stated mechanism's key terms found
+  verbatim in the cited PubMed abstracts) — combined with the existing
+  confidence, KG path, ADMET verdict, and clinical-trial phase, this is the
+  shortlist a researcher needs before deciding what to pursue further.
+
 ## 1. Overview
 
 Drugenix is a multi-agent pipeline that takes a disease query and produces ranked,

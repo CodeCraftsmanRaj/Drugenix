@@ -21,6 +21,13 @@ class DrugCandidate:
     evidence_pmids: list[str]
     original_use: str = ""          # disease/condition it is currently approved for
     repurposing_rationale: str = "" # scientific reason it may work for the queried disease
+    # "literature"  - normal path: grounded in retrieved PubMed abstracts.
+    # "mechanistic" - fallback path used when direct literature is thin/absent
+    #                 (e.g. a brand-new or very rare disease): proposed via
+    #                 target/pathway overlap with related diseases instead of
+    #                 direct citations. Always ranked below literature-backed
+    #                 candidates and never silently mixed in without this tag.
+    evidence_tier: str = "literature"
 
 
 @dataclass

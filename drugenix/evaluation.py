@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+import random
 import re
 from statistics import mean
 
@@ -93,6 +94,47 @@ def auroc_from_rankings(
     return (concordant + ties) / total
 
 
+def bootstrap_ci(
+    scores: list[float], n_boot: int = 2000, confidence: float = 0.95, seed: int = 42
+) -> dict:
+    """
+    Nonparametric bootstrap confidence interval for the mean of `scores`.
+    Reported alongside every aggregate metric so results aren't presented
+    with more certainty than a small evaluation set (a handful of diseases)
+    actually supports — important for a research/clinical-trial-shortlist
+    audience that needs to know how much to trust a single point estimate.
+
+    Returns {"mean", "n", "ci_low", "ci_high", "confidence"}. With n < 2,
+    the interval collapses to the point estimate (nothing to resample).
+    """
+    n = len(scores)
+    if n == 0:
+        return {"mean": 0.0, "n": 0, "ci_low": 0.0, "ci_high": 0.0, "confidence": confidence}
+    point_mean = mean(scores)
+    if n < 2:
+        return {"mean": round(point_mean, 4), "n": n, "ci_low": round(point_mean, 4), "ci_high": round(point_mean, 4), "confidence": confidence}
+
+    rng = random.Random(seed)
+    boot_means = []
+    for _ in range(n_boot):
+        sample = [scores[rng.randrange(n)] for _ in range(n)]
+        boot_means.append(mean(sample))
+    boot_means.sort()
+
+    lower_idx = int((1 - confidence) / 2 * n_boot)
+    upper_idx = int((1 - (1 - confidence) / 2) * n_boot) - 1
+    lower_idx = max(0, min(lower_idx, n_boot - 1))
+    upper_idx = max(0, min(upper_idx, n_boot - 1))
+
+    return {
+        "mean": round(point_mean, 4),
+        "n": n,
+        "ci_low": round(boot_means[lower_idx], 4),
+        "ci_high": round(boot_means[upper_idx], 4),
+        "confidence": confidence,
+    }
+
+
 def _tokenize(text: str) -> list[str]:
     return [t.lower() for t in re.findall(r"[A-Za-z][A-Za-z\-]{2,}", text)]
 
@@ -132,6 +174,7 @@ def groundedness_summary(result_json: dict) -> dict:
         "min": min(scores) if scores else 0.0,
         "max": max(scores) if scores else 0.0,
         "scores": scores,
+        "confidence_interval": bootstrap_ci(scores),
     }
 
 
@@ -176,10 +219,22 @@ def compute_full_metrics(
     def _avg(lst: list[float]) -> float:
         return round(sum(lst) / len(lst), 3) if lst else 0.0
 
+    n_diseases = sum(1 for d in predictions_by_disease if gold.get(d))
+
     return {
         "hit_at_k": {f"Hit@{k}": _avg(hit_scores[k]) for k in ks},
         "precision_at_k": {f"P@{k}": _avg(prec_scores[k]) for k in ks},
         "ndcg_at_k": {f"nDCG@{k}": _avg(ndcg_scores[k]) for k in ks},
         "mrr": _avg(mrr_scores),
         "auroc": _avg(auroc_scores),
+        # Additive fields — don't change the shape of the keys above (existing
+        # dashboards/scripts read those directly), just add the sample size
+        # and 95% bootstrap CIs needed to judge how much to trust them.
+        "n_diseases": n_diseases,
+        "confidence_intervals": {
+            "hit_at_k": {f"Hit@{k}": bootstrap_ci(hit_scores[k]) for k in ks},
+            "precision_at_k": {f"P@{k}": bootstrap_ci(prec_scores[k]) for k in ks},
+            "mrr": bootstrap_ci(mrr_scores),
+            "auroc": bootstrap_ci(auroc_scores),
+        },
     }

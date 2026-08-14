@@ -182,6 +182,15 @@ def _build_merged_result(plan: ExecutionPlan) -> dict:
     agg_hallucinations = 0
     agg_summaries = []
 
+    # These used to be silently dropped by the merge entirely — a
+    # multi-disease or symptom-derived query would come back with no
+    # ADMET/ClinicalTrials data and no data-quality warnings at all, even
+    # though each individual sub-task pipeline run computed them.
+    merged_admet: dict = {}
+    merged_clinical_trials: dict = {}
+    merged_data_quality_warnings: list[str] = []
+    reasoning_modes: set[str] = set()
+
     for task in plan.tasks:
         # Include all tasks in sub_results so the banner shows the full decomposition
         sub_results.append({
@@ -236,6 +245,16 @@ def _build_merged_result(plan: ExecutionPlan) -> dict:
         if agg.get("evidence_summary"):
             agg_summaries.append(f"[{task.disease_query}] {agg['evidence_summary']}")
 
+        # Merge ADMET / ClinicalTrials — keyed by drug name, so overlapping
+        # drug names across sub-tasks just get overwritten with equivalent data.
+        merged_admet.update(result.get("admet", {}))
+        merged_clinical_trials.update(result.get("clinical_trials", {}))
+
+        for w in result.get("data_quality_warnings", []):
+            merged_data_quality_warnings.append(f"[{task.disease_query}] {w}")
+
+        reasoning_modes.add(result.get("runtime", {}).get("reasoning_mode", "unknown"))
+
     # Deduplicate across sub-tasks: keep the higher-confidence entry per drug name
     def _dedup(candidates: list[dict]) -> list[dict]:
         seen: dict[str, dict] = {}
@@ -281,6 +300,14 @@ def _build_merged_result(plan: ExecutionPlan) -> dict:
         },
         "retrieved": all_retrieved,
         "candidates": all_candidates,
+        "admet": merged_admet,
+        "clinical_trials": merged_clinical_trials,
+        "data_quality_warnings": merged_data_quality_warnings,
+        "runtime": {
+            "reasoning_mode": "heuristic" if "heuristic" in reasoning_modes else (
+                "llm" if reasoning_modes == {"llm"} else "mixed" if reasoning_modes else "unknown"
+            ),
+        },
         "validation": {
             "results": all_validation_results,
             "stats": {

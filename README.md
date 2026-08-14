@@ -7,17 +7,32 @@
 
 ## Pipeline Architecture
 
+Two entry points, both driving the same downstream pipeline:
+
+- **Disease/condition query** (`POST /api/query`) — the original flow.
+- **Symptom query** (`POST /api/symptom-query`) — describe symptoms in plain
+  language instead of naming a disease; a Symptom Agent interprets them
+  into ranked, PubMed-grounded candidate conditions first, then hands the
+  top match(es) to the same pipeline below. Research hypothesis only, not
+  a diagnostic tool — every response carries a disclaimer.
+
 ```
-Query
-  │
-  ▼
+Query (disease name)          Symptoms (free text)
+  │                                  │
+  │                                  ▼
+  │                         ┌──────────────────┐
+  │                         │  Symptom Agent   │  LLM → candidate conditions,
+  │                         │                  │  grounded via live PubMed search
+  │                         └────────┬─────────┘
+  │                                  │ (top condition(s))
+  ▼                                  ▼
 ┌──────────────────┐
-│  Planner Agent   │  Decomposes multi-disease queries into sub-tasks
+│  Planner Agent   │  Decomposes multi-disease/multi-condition queries into sub-tasks
 └────────┬─────────┘
          │
          ▼
 ┌──────────────────┐
-│ Retrieval Agent  │  PubMed API + semantic reranking (sentence-transformers)
+│ Retrieval Agent  │  Live PubMed E-Utilities + semantic reranking (sentence-transformers)
 └────────┬─────────┘
          │
          ▼
@@ -27,7 +42,10 @@ Query
          │
          ▼
 ┌──────────────────┐
-│ Reasoning Agent  │  LLM/heuristic candidate generation (Ollama / OpenAI / Gemini)
+│ Reasoning Agent  │  LLM/heuristic candidate generation (Ollama / OpenAI / Gemini).
+│ + Mechanism      │  If PubMed literature is thin (new/emerging/very rare disease),
+│   Fallback       │  a mechanism-similarity fallback proposes drugs via shared-target
+│                  │  overlap instead — tagged "mechanistic", never mixed in silently.
 └────────┬─────────┘
          │
          ▼
@@ -37,13 +55,16 @@ Query
          │
          ▼
 ┌──────────────────┐
-│Knowledge Graph   │  Drug→Target→Disease paths (NetworkX + ChEMBL + CTD)
-│    Agent         │  + TransE link prediction (PyKEEN)
+│Knowledge Graph   │  Drug→Target→Disease paths. Primary source is a LIVE call to the
+│    Agent         │  Open Targets Platform API per query — covers essentially any
+│                  │  disease, not a fixed list. Curated relationships + ChEMBL + CTD
+│                  │  are kept only as an offline fallback. + TransE link prediction.
 └────────┬─────────┘
          │
          ▼
 ┌──────────────────┐
-│  Master Agent    │  Evidence fusion · final ranking · ADMET filter · ClinicalTrials.gov
+│  Master Agent    │  Evidence fusion · final ranking (with live groundedness score
+│                  │  per candidate) · ADMET filter (PubChem) · ClinicalTrials.gov
 └──────────────────┘
 ```
 

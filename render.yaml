@@ -1,0 +1,32 @@
+# Render Blueprint — deploys the Drugenix FastAPI backend on Render's free
+# tier with one click ("New +" -> "Blueprint" -> point at this repo).
+#
+# What this does NOT do: deploy the frontend (that goes to Vercel/Netlify
+# separately, see DEPLOYMENT.md) or set secret values for you — GEMINI_API_KEY
+# must be entered manually in the Render dashboard after the first deploy
+# (Render blueprints intentionally never store secrets in the repo).
+#
+# requirements.txt is deliberately minimal (no torch/spacy/chromadb/etc) so
+# this fits Render's free-tier 512MB RAM instances — see the comment at the
+# top of requirements.txt for why those heavier ML deps are optional.
+
+services:
+  - type: web
+    name: drugenix-backend
+    runtime: python
+    plan: free
+    branch: rasika
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scripts/run_api.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: HOST
+        value: 0.0.0.0
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false   # set manually in the Render dashboard — never commit real keys
+      - key: GEMINI_MODEL
+        value: gemini-3.6-flash
+    healthCheckPath: /api/health

@@ -4,8 +4,8 @@ echo ===============================================
 echo  Drugenix - one-time setup
 echo ===============================================
 echo.
-echo Installing backend dependencies (fastapi, uvicorn, pydantic, networkx)...
-pip install fastapi uvicorn pydantic networkx
+echo Installing backend dependencies (from requirements.txt)...
+pip install -r requirements.txt
 if errorlevel 1 (
     echo.
     echo Backend dependency install FAILED. Check your Python/pip installation.

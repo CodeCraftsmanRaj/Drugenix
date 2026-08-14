@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import logging
 import re
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -8,8 +11,15 @@ from collections import Counter
 
 from drugenix.models import EvidenceDoc
 
+logger = logging.getLogger(__name__)
+
 _EUTILS_BASE = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 _WORD_RE = re.compile(r"[a-zA-Z][a-zA-Z0-9\-]+")
+# NCBI E-utilities rate-limits unauthenticated traffic to 3 req/sec; without
+# retry logic, a researcher running several queries back-to-back would
+# silently get throttled (HTTP 429) into an empty-looking result instead of
+# an actual error. Retry with backoff instead of failing on the first hit.
+_MAX_RETRIES = 3
 _CLEAN_PREFIXES = (
     "find ",
     "suggest ",
@@ -74,14 +84,49 @@ def _overlap_score(query: str, title: str, abstract: str) -> float:
     return overlap / max(1.0, len(q_counts))
 
 
-def _http_get(url: str) -> bytes:
-    req = urllib.request.Request(
-        url,
-        headers={"User-Agent": "Drugenix/0.1 (MVP retrieval pipeline)"},
-        method="GET",
-    )
-    with urllib.request.urlopen(req, timeout=25) as response:
-        return response.read()
+def _http_get(url: str, max_retries: int = _MAX_RETRIES) -> bytes:
+    """
+    GET with retry/backoff for transient failures (rate limiting, timeouts,
+    5xx). A single failed request used to propagate straight up and (via
+    pipeline.py's try/except around retrieval) silently turn into "0 papers
+    found" — indistinguishable from a genuine empty result. Retrying first
+    means a real NCBI hiccup doesn't masquerade as "no evidence exists".
+    """
+    last_exc: Exception | None = None
+
+    for attempt in range(max_retries):
+        req = urllib.request.Request(
+            url,
+            headers={"User-Agent": "Drugenix/1.0 (research pipeline)"},
+            method="GET",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=25) as response:
+                return response.read()
+        except urllib.error.HTTPError as e:
+            last_exc = e
+            if e.code == 429 or 500 <= e.code < 600:
+                retry_after = e.headers.get("Retry-After") if e.headers else None
+                wait = float(retry_after) if retry_after else 0.5 * (2 ** attempt)
+                logger.warning(
+                    "PubMed request throttled/failed (HTTP %d), retrying in %.1fs (attempt %d/%d): %s",
+                    e.code, wait, attempt + 1, max_retries, url,
+                )
+                time.sleep(wait)
+                continue
+            raise
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            last_exc = e
+            wait = 0.5 * (2 ** attempt)
+            logger.warning(
+                "PubMed request failed (%s), retrying in %.1fs (attempt %d/%d): %s",
+                e, wait, attempt + 1, max_retries, url,
+            )
+            time.sleep(wait)
+            continue
+
+    assert last_exc is not None
+    raise last_exc
 
 
 def _pubmed_search_ids(disease_query: str, retmax: int) -> list[str]:

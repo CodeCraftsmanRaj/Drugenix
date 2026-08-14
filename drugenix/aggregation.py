@@ -57,6 +57,7 @@ class AggregatedCandidate:
     explanation: str = ""
     original_use: str = ""           # what the drug is currently approved for
     repurposing_rationale: str = ""  # why it may work for the queried disease
+    evidence_tier: str = "literature"  # "literature" | "mechanistic" (see models.DrugCandidate)
 
 
 @dataclass
@@ -99,6 +100,7 @@ def aggregate(
 
     for candidate in candidates:
         drug_lower = candidate.drug.lower()
+        is_mechanistic = getattr(candidate, "evidence_tier", "literature") == "mechanistic"
         traces: list[ReasoningTrace] = []
         evidence_sources: list[EvidenceSource] = []
         conflicts: list[str] = []
@@ -238,7 +240,12 @@ def aggregate(
         # Absence from our small curated KG (~30 entries) or the general-purpose
         # spaCy NER model is NOT sufficient evidence of hallucination — many
         # legitimate repurposing candidates are simply not yet curated.
-        if len(pmids) == 0:
+        # Mechanistic-tier candidates are EXPECTED to have zero PMIDs by
+        # design (they exist specifically because literature is thin/absent
+        # for this disease) — flagging them as "likely hallucinated" would
+        # be wrong, so they're excluded from this check entirely and instead
+        # carry their own explicit "mechanistic/indirect" label everywhere.
+        if len(pmids) == 0 and not is_mechanistic:
             hallucination_flags.append("No PMID evidence — likely hallucinated")
 
         # --- Weighted confidence fusion ---
@@ -258,9 +265,14 @@ def aggregate(
         elif kg_validated or ner_confirmed:
             final_confidence = min(1.0, final_confidence * 1.05)
         if hallucination_flags:
-            final_confidence *= 0.60  # only fires when PMIDs == 0
+            final_confidence *= 0.60  # only fires when PMIDs == 0 and not mechanistic
         if val_status == "FAIL":
             final_confidence *= 0.70  # softer penalty — validation FAIL ≠ wrong drug
+        if is_mechanistic:
+            # Hard ceiling: mechanistic/indirect candidates must never
+            # outrank a literature-backed candidate, no matter how strong
+            # the target-overlap signal looks numerically.
+            final_confidence = min(final_confidence, 0.50)
 
         traces.append(ReasoningTrace(
             drug=candidate.drug,
@@ -278,6 +290,11 @@ def aggregate(
 
         # Build explanation
         explanation_parts = []
+        if is_mechanistic:
+            explanation_parts.append(
+                "MECHANISTIC/INDIRECT candidate — proposed via target-overlap reasoning, "
+                "not direct PubMed literature for this disease"
+            )
         if known_mechanism:
             explanation_parts.append(f"Mechanism: {known_mechanism}")
         if known_targets:
@@ -311,6 +328,7 @@ def aggregate(
             explanation=". ".join(explanation_parts),
             original_use=candidate.original_use,
             repurposing_rationale=candidate.repurposing_rationale,
+            evidence_tier=getattr(candidate, "evidence_tier", "literature"),
         )
         aggregated.append(agg)
 
@@ -370,6 +388,7 @@ def report_to_dict(report: AggregationReport) -> dict:
             "drug": c.drug,
             "final_confidence": c.final_confidence,
             "validation_status": c.validation_status,
+            "evidence_tier": c.evidence_tier,
             "original_use": c.original_use,
             "repurposing_rationale": c.repurposing_rationale,
             "pmid_count": c.pmid_count,

@@ -15,6 +15,14 @@ export default function CandidateCard({ candidate }) {
             #{candidate.rank}
           </span>
           <span style={{ fontWeight: 700, fontSize: 15 }}>{candidate.drug}</span>
+          {candidate.evidence_tier === "mechanistic" && (
+            <span
+              className="badge badge-warn"
+              title="Proposed via target/pathway-overlap reasoning, not direct PubMed literature for this disease — treat as a speculative starting point."
+            >
+              ⚙ Mechanistic (indirect)
+            </span>
+          )}
           <StatusBadge status={candidate.validation_status} />
           {candidate.kg_validated && (
             <span className="badge badge-neutral" title="Confirmed by Knowledge Graph">◈ KG</span>
@@ -46,6 +54,14 @@ export default function CandidateCard({ candidate }) {
           )}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
+          {candidate.groundedness != null && (
+            <span
+              style={{ fontSize: 12, color: "var(--text-muted)" }}
+              title="Groundedness: fraction of the stated mechanism's key terms found verbatim in the cited PubMed abstracts"
+            >
+              Grounded {(candidate.groundedness * 100).toFixed(0)}%
+            </span>
+          )}
           <ConfidenceBar value={candidate.final_confidence} />
           <span style={{ fontSize: 13, color: "var(--text-muted)" }}>{open ? "▲" : "▼"}</span>
         </div>

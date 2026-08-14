@@ -1,23 +1,23 @@
 {
   "retrieval": {
-    "P@1": 0.2,
-    "P@3": 0.111,
-    "P@5": 0.093,
-    "P@10": 0.058
+    "P@1": 0.6,
+    "P@3": 0.333,
+    "P@5": 0.28,
+    "P@10": 0.175
   },
   "generation": {
-    "mean_groundedness": 0.542,
-    "Top-1 Accuracy": 0.2,
-    "Top-3 Accuracy": 0.2,
-    "Top-5 Accuracy": 0.2,
-    "Top-10 Accuracy": 0.2,
-    "mrr": 0.2,
-    "auroc": 0.582
+    "mean_groundedness": 0.593,
+    "Top-1 Accuracy": 0.6,
+    "Top-3 Accuracy": 0.6,
+    "Top-5 Accuracy": 0.6,
+    "Top-10 Accuracy": 0.6,
+    "mrr": 0.6,
+    "auroc": 0.747
   },
   "ablation": {
-    "without_rag_correctness": 0.067,
-    "without_rag_groundedness": 0.979,
-    "with_rag_correctness": 0.2,
-    "with_rag_groundedness": 0.576
+    "without_rag_correctness": 0.2,
+    "without_rag_groundedness": 0.932,
+    "with_rag_correctness": 0.6,
+    "with_rag_groundedness": 0.706
   }
 }

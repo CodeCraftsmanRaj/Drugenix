@@ -23,6 +23,13 @@ export function runQuery(payload) {
   });
 }
 
+export function runSymptomQuery(payload) {
+  return request("/api/symptom-query", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
 export function getHistory(limit = 50) {
   return request(`/api/history?limit=${limit}`);
 }
@@ -65,6 +72,10 @@ export function trainEmbeddings(epochs = 150, dim = 64) {
 
 export function getCaseStudies() {
   return request("/api/case-studies");
+}
+
+export function runBenchmark() {
+  return request("/api/run-benchmark", { method: "POST" });
 }
 
 export function getPredictBenchmark() {
