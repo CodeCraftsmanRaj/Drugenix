@@ -22,7 +22,7 @@ _DRUG_KEYWORDS = ("inhibitor", "agonist", "antagonist", "activator", "blocker", 
 # blocking a live request for; otherwise fail fast with a clear error rather
 # than stalling the UI for an unknown/long amount of time.
 _GEMINI_RATE_LIMIT_RETRY_PATTERN = re.compile(r"retry in\s+([\d.]+)\s*s", re.IGNORECASE)
-_GEMINI_MAX_RETRY_WAIT_SECONDS = 20.0
+_GEMINI_MAX_RETRY_WAIT_SECONDS = 75.0
 
 
 def _is_rate_limit_error(message: str) -> bool:

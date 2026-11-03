@@ -16,6 +16,9 @@ dependencies = [
     "pydantic>=2.0",
     "requests>=2.31.0",
     "numpy>=1.26.0",
+    "google-genai",
+    "pykeen",
+    "scipy",
 ]
 
 [project.scripts]
@@ -24,3 +27,7 @@ drugenix = "main:main"
 [build-system]
 requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["drugenix"]
+py-modules = ["main"]

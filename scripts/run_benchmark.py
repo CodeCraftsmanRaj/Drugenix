@@ -248,7 +248,7 @@ def main():
         elapsed = time.time() - t0
         print(f"  {disease}: LLM={len(pure_llm_preds[disease])} drugs, Hybrid={len(hybrid_preds[disease])} candidates ({elapsed:.0f}s)")
         # Respect PubMed E-utilities rate limit (3 requests/sec without API key)
-        time.sleep(1)
+        time.sleep(12)
 
     # Hybrid recommended-only view
     hybrid_rec_preds = {
