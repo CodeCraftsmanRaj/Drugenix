@@ -1,0 +1,338 @@
+# Drugenix inference report
+
+**Query:** Find repurposed drug candidates for Alzheimer disease with evidence from PubMed
+**Provider:** ollama
+**Model:** llama3.1:8b
+**Retrieved abstracts:** 8
+**Candidate drugs:** 8
+
+## Candidate drugs
+
+| Rank | Drug | Confidence | Evidence PMIDs | Mechanism |
+|---|---|---:|---|---|
+| 1 | Oestrogen | 0.80 | 10965513 | Neurotrophic and neuroprotective effects, reduces amyloid burden |
+| 2 | Abeta vaccine | 0.90 | 18939505, 20831921 | Clears senile plaques, induces high antibody titers to amyloid plaques |
+| 3 | Rapamycin (mTOR inhibitor) | 0.70 | 27260250 | Enhances autophagy, reduces β-amyloid generation and metabolism |
+| 4 | Monoclonal antibodies to Abeta | 0.80 | 18939505, 20831921 | Passive immunization, reduces amyloid burden |
+| 5 | Viral vectors with Abeta cDNA | 0.90 | 18939505, 20831921 | Oral or nasal vaccine, reduces amyloid burden and improves cognitive function |
+| 6 | Tau-targeting therapies | 0.60 | 27260250 | Assembling of tau, may lead to AD progression |
+| 7 | Multitarget molecules | 0.50 | 29500890, 32125005 | Combination therapy for multiple targets in AD |
+| 8 | Brain Shuttle-mAb (BS-mAb) | 0.80 | 29298417 | Transport of monoclonal antibodies across the blood-brain barrier |
+
+## Top retrieved evidence
+
+| PMID | Score | Title | Journal | Year |
+|---|---:|---|---|---|
+| 34181171 | 1.00 | Recent advances on drug development and emerging therapeutic agents for Alzheimer's disease. | Molecular biology reports | 2021 |
+| 20831921 | 1.00 | Alzheimer disease. | Disease-a-month : DM | 2010 |
+| 18939505 | 1.00 | [Alzheimer vaccine]. | Nihon rinsho. Japanese journal of clinical medicine | 2008 |
+| 10965513 | 1.00 | Oestrogens and dementia. | Novartis Foundation symposium | 2000 |
+| 27260250 | 1.00 | Autophagy and Alzheimer's Disease. | Cellular and molecular neurobiology | 2017 |
+| 29500890 | 1.00 | Editorial: Multitarget Molecules for Alzheimer's Disease Therapy. | Current topics in medicinal chemistry | 2017 |
+| 29298417 | 1.00 | Brain Shuttle Antibody for Alzheimer's Disease with Attenuated Peripheral Effector Function due to an Inverted Bindin... | Cell reports | 2018 |
+| 32125005 | 1.00 | Alzheimer's disease: A need for personalized therapeutic approaches. | Drug development research | 2020 |
+
+## Raw JSON
+
+```json
+{
+  "query": "Find repurposed drug candidates for Alzheimer disease with evidence from PubMed",
+  "runtime": {
+    "llm_provider": "ollama",
+    "openai_model": "",
+    "gemini_model": "",
+    "ollama_model": "llama3.1:8b",
+    "custom_model": ""
+  },
+  "retrieved": [
+    {
+      "pmid": "34181171",
+      "title": "Recent advances on drug development and emerging therapeutic agents for Alzheimer's disease.",
+      "abstract": "Alzheimer's disease (AD) is a neurodegenerative old age disease that is complex, multifactorial, unalterable, and progressive in nature. The currently approved therapy includes cholinesterase inhibitors, NMDA-receptor antagonists and their combination therapy provides only temporary symptomatic relief. Sincere efforts have been made by the researchers globally to identify new targets, discover, and develop novel therapeutic agents for the treatment of AD. This brief review article is intended to cover the recent advances in drug development and emerging therapeutic agents for AD acting at different targets. The article is compiled using various scientific online databases and by referring to clinicaltrials.gov and ALZFORUM (alzforum.org) websites. The upcoming therapies act on one or more targets including amyloids (secretases, Aβ42 production, amyloid deposition, and immunotherapy), tau proteins (tau phosphorylation/aggregation and immunotherapy) and neuroinflammation in addition to other miscellaneous targets. Despite the tremendous improvement in our understanding of the underlying pathophysiology of AD, only aducanumab was approved by FDA for the treatment of AD in 18 years i.e., since 2003. Hence, it is concluded that novel therapeutic strategies are required to discover and develop therapeutic agents to fight against the century old AD.",
+      "journal": "Molecular biology reports",
+      "year": "2021",
+      "retrieval_score": 1.0
+    },
+    {
+      "pmid": "20831921",
+      "title": "Alzheimer disease.",
+      "abstract": "",
+      "journal": "Disease-a-month : DM",
+      "year": "2010",
+      "retrieval_score": 1.0
+    },
+    {
+      "pmid": "18939505",
+      "title": "[Alzheimer vaccine].",
+      "abstract": "Autopsy cases who had received Abeta vaccine showed clearance of senile plaques, and beneficial effect was shown in patients who had high antibody titers to amyloid plaques. Thus, vaccination is widely accepted as promising therapy for Alzheimer disease. Since active immunization induced autoimmune-like meningoencephalitis, pharmaceutical companies are interested in passive immunization using monoclonal antibodies to Abeta. However, due to immunization burden and economical issues, safe active immunization is still attractive. We developed oral or nasal Abeta vaccine using viral vectors and Abeta cDNA with a signal peptide. These vaccine reduced amyloid burden and improved cognitive functions in mice. We believe this vaccine is useful for prevention and treatment of Alzheimer disease.",
+      "journal": "Nihon rinsho. Japanese journal of clinical medicine",
+      "year": "2008",
+      "retrieval_score": 1.0
+    },
+    {
+      "pmid": "10965513",
+      "title": "Oestrogens and dementia.",
+      "abstract": "The decline in circulating oestrogen concentrations that occurs after the menopause has the potential to impact Alzheimer's disease and other forms of dementia. Relevant actions include neurotrophic and neuroprotective effects; effects on acetylcholine and other neurotransmitters; and effects on proteins implicated in Alzheimer's disease pathogenesis. Since 1990, 14 case-control and cohort studies have considered the relation between postmenopausal oestrogen therapy and Alzheimer's disease. Most, but not all, report that oestrogen therapy is associated with a reduced Alzheimer risk of approximately one-half. Almost no epidemiological data address the potential link between oestrogen and other forms of dementia. Several small interventional trials have considered whether oestrogen might improve cognitive function of women with Alzheimer's disease. Data, however, are limited, and there is no compelling evidence that the short-term use of oestrogen monotherapy has a substantial impact on dementia symptoms. In summary, the use of oestrogen to reduce Alzheimer risk is biologically credible, and the preponderance of epidemiological evidence suggests that oestrogen therapy is indeed protective. This potentially important role of oestrogens for the primary prevention of Alzheimer's disease remains to be verified through well-designed randomized controlled trials.",
+      "journal": "Novartis Foundation symposium",
+      "year": "2000",
+      "retrieval_score": 1.0
+    },
+    {
+      "pmid": "27260250",
+      "title": "Autophagy and Alzheimer's Disease.",
+      "abstract": "Autophagy is an essential degradation pathway in clearing abnormal protein aggregates in mammalian cells and is responsible for protein homeostasis and neuronal health. Several studies have shown that autophagy deficits occurred in early stage of Alzheimer's disease (AD). Autophagy plays an important role in generation and metabolism of β-amyloid (Aβ), assembling of tau and thus its malfunction may lead to the progress of AD. By considering the above evidences, autophagy may be a new target in developing drugs for AD. So far, a number of mammalian target of rapamycin (mTOR)-dependent and independent autophagy modulators have been identified to have positive effects in AD treatment. In this review, we summarized the latest progress supporting the role for autophagy deficits in AD and the potential therapeutic effects of autophagy modulators in AD.",
+      "journal": "Cellular and molecular neurobiology",
+      "year": "2017",
+      "retrieval_score": 1.0
+    },
+    {
+      "pmid": "29500890",
+      "title": "Editorial: Multitarget Molecules for Alzheimer's Disease Therapy.",
+      "abstract": "",
+      "journal": "Current topics in medicinal chemistry",
+      "year": "2017",
+      "retrieval_score": 1.0
+    },
+    {
+      "pmid": "29298417",
+      "title": "Brain Shuttle Antibody for Alzheimer's Disease with Attenuated Peripheral Effector Function due to an Inverted Binding Mode.",
+      "abstract": "Receptors show promise for the transport of monoclonal antibodies (mAbs) across the blood-brain barrier. However, safety liabilities associated with peripheral receptor binding and Fc effector function have been reported. We present the Brain Shuttle-mAb (BS-mAb) technology, and we investigate the role of Fc effector function in vitro and in an Fcγ receptor (FcγR)-humanized mouse model. Strong first infusion reactions (FIRs) were observed for a conventional mAb against transferrin receptor (TfR) with a wild-type immunoglobulin G1 (IgG1) Fc. Fc effector-dead constructs completely eliminated all FIRs. Remarkably, no FIR was observed for the BS-mAb construct with a native IgG1 Fc function. Using various BS-mAb constructs, we show that TfR binding through the C-terminal BS module attenuates Fc-FcγR interactions, primarily because of steric hindrance. Nevertheless, BS-mAbs maintain effector function activity when binding their brain target. Thus, mAbs with full effector function can be transported in a stealth mode in the periphery while fully active when engaged with their brain target.",
+      "journal": "Cell reports",
+      "year": "2018",
+      "retrieval_score": 1.0
+    },
+    {
+      "pmid": "32125005",
+      "title": "Alzheimer's disease: A need for personalized therapeutic approaches.",
+      "abstract": "",
+      "journal": "Drug development research",
+      "year": "2020",
+      "retrieval_score": 1.0
+    }
+  ],
+  "candidates": [
+    {
+      "drug": "Oestrogen",
+      "mechanism": "Neurotrophic and neuroprotective effects, reduces amyloid burden",
+      "confidence": 0.8,
+      "evidence_pmids": [
+        "10965513"
+      ]
+    },
+    {
+      "drug": "Abeta vaccine",
+      "mechanism": "Clears senile plaques, induces high antibody titers to amyloid plaques",
+      "confidence": 0.9,
+      "evidence_pmids": [
+        "18939505",
+        "20831921"
+      ]
+    },
+    {
+      "drug": "Rapamycin (mTOR inhibitor)",
+      "mechanism": "Enhances autophagy, reduces β-amyloid generation and metabolism",
+      "confidence": 0.7,
+      "evidence_pmids": [
+        "27260250"
+      ]
+    },
+    {
+      "drug": "Monoclonal antibodies to Abeta",
+      "mechanism": "Passive immunization, reduces amyloid burden",
+      "confidence": 0.8,
+      "evidence_pmids": [
+        "18939505",
+        "20831921"
+      ]
+    },
+    {
+      "drug": "Viral vectors with Abeta cDNA",
+      "mechanism": "Oral or nasal vaccine, reduces amyloid burden and improves cognitive function",
+      "confidence": 0.9,
+      "evidence_pmids": [
+        "18939505",
+        "20831921"
+      ]
+    },
+    {
+      "drug": "Tau-targeting therapies",
+      "mechanism": "Assembling of tau, may lead to AD progression",
+      "confidence": 0.6,
+      "evidence_pmids": [
+        "27260250"
+      ]
+    },
+    {
+      "drug": "Multitarget molecules",
+      "mechanism": "Combination therapy for multiple targets in AD",
+      "confidence": 0.5,
+      "evidence_pmids": [
+        "29500890",
+        "32125005"
+      ]
+    },
+    {
+      "drug": "Brain Shuttle-mAb (BS-mAb)",
+      "mechanism": "Transport of monoclonal antibodies across the blood-brain barrier",
+      "confidence": 0.8,
+      "evidence_pmids": [
+        "29298417"
+      ]
+    }
+  ],
+  "validation": {
+    "results": [
+      {
+        "drug": "Abeta vaccine",
+        "status": "FAIL",
+        "confidence": 0.9,
+        "adjusted_confidence": 0.54,
+        "checks": {
+          "name_plausible": false,
+          "evidence_strength": "moderate",
+          "safety_flags": [],
+          "original_confidence": 0.9,
+          "adjusted_confidence": 0.54
+        },
+        "warnings": [
+          "'Abeta vaccine' does not resemble a recognised drug name."
+        ],
+        "summary": "[FAIL] Abeta vaccine | confidence=0.54 | rejected ('Abeta vaccine' does not resemble a recognised drug name.)"
+      },
+      {
+        "drug": "Viral vectors with Abeta cDNA",
+        "status": "FAIL",
+        "confidence": 0.9,
+        "adjusted_confidence": 0.54,
+        "checks": {
+          "name_plausible": false,
+          "evidence_strength": "moderate",
+          "safety_flags": [],
+          "original_confidence": 0.9,
+          "adjusted_confidence": 0.54
+        },
+        "warnings": [
+          "'Viral vectors with Abeta cDNA' does not resemble a recognised drug name."
+        ],
+        "summary": "[FAIL] Viral vectors with Abeta cDNA | confidence=0.54 | rejected ('Viral vectors with Abeta cDNA' does not resemble a recognised drug name.)"
+      },
+      {
+        "drug": "Monoclonal antibodies to Abeta",
+        "status": "FAIL",
+        "confidence": 0.8,
+        "adjusted_confidence": 0.48,
+        "checks": {
+          "name_plausible": false,
+          "evidence_strength": "moderate",
+          "safety_flags": [],
+          "original_confidence": 0.8,
+          "adjusted_confidence": 0.48
+        },
+        "warnings": [
+          "'Monoclonal antibodies to Abeta' does not resemble a recognised drug name."
+        ],
+        "summary": "[FAIL] Monoclonal antibodies to Abeta | confidence=0.48 | rejected ('Monoclonal antibodies to Abeta' does not resemble a recognised drug name.)"
+      },
+      {
+        "drug": "Oestrogen",
+        "status": "FAIL",
+        "confidence": 0.8,
+        "adjusted_confidence": 0.384,
+        "checks": {
+          "name_plausible": false,
+          "evidence_strength": "weak",
+          "safety_flags": [],
+          "original_confidence": 0.8,
+          "adjusted_confidence": 0.384
+        },
+        "warnings": [
+          "'Oestrogen' does not resemble a recognised drug name.",
+          "Only 1 supporting PMID — evidence is thin."
+        ],
+        "summary": "[FAIL] Oestrogen | confidence=0.38 | rejected ('Oestrogen' does not resemble a recognised drug name.)"
+      },
+      {
+        "drug": "Brain Shuttle-mAb (BS-mAb)",
+        "status": "FAIL",
+        "confidence": 0.8,
+        "adjusted_confidence": 0.384,
+        "checks": {
+          "name_plausible": false,
+          "evidence_strength": "weak",
+          "safety_flags": [],
+          "original_confidence": 0.8,
+          "adjusted_confidence": 0.384
+        },
+        "warnings": [
+          "'Brain Shuttle-mAb (BS-mAb)' does not resemble a recognised drug name.",
+          "Only 1 supporting PMID — evidence is thin."
+        ],
+        "summary": "[FAIL] Brain Shuttle-mAb (BS-mAb) | confidence=0.38 | rejected ('Brain Shuttle-mAb (BS-mAb)' does not resemble a recognised drug name.)"
+      },
+      {
+        "drug": "Rapamycin (mTOR inhibitor)",
+        "status": "FAIL",
+        "confidence": 0.7,
+        "adjusted_confidence": 0.336,
+        "checks": {
+          "name_plausible": false,
+          "evidence_strength": "weak",
+          "safety_flags": [],
+          "original_confidence": 0.7,
+          "adjusted_confidence": 0.336
+        },
+        "warnings": [
+          "'Rapamycin (mTOR inhibitor)' does not resemble a recognised drug name.",
+          "Only 1 supporting PMID — evidence is thin."
+        ],
+        "summary": "[FAIL] Rapamycin (mTOR inhibitor) | confidence=0.34 | rejected ('Rapamycin (mTOR inhibitor)' does not resemble a recognised drug name.)"
+      },
+      {
+        "drug": "Multitarget molecules",
+        "status": "FAIL",
+        "confidence": 0.5,
+        "adjusted_confidence": 0.3,
+        "checks": {
+          "name_plausible": false,
+          "evidence_strength": "moderate",
+          "safety_flags": [],
+          "original_confidence": 0.5,
+          "adjusted_confidence": 0.3
+        },
+        "warnings": [
+          "'Multitarget molecules' does not resemble a recognised drug name."
+        ],
+        "summary": "[FAIL] Multitarget molecules | confidence=0.30 | rejected ('Multitarget molecules' does not resemble a recognised drug name.)"
+      },
+      {
+        "drug": "Tau-targeting therapies",
+        "status": "FAIL",
+        "confidence": 0.6,
+        "adjusted_confidence": 0.288,
+        "checks": {
+          "name_plausible": false,
+          "evidence_strength": "weak",
+          "safety_flags": [],
+          "original_confidence": 0.6,
+          "adjusted_confidence": 0.288
+        },
+        "warnings": [
+          "'Tau-targeting therapies' does not resemble a recognised drug name.",
+          "Only 1 supporting PMID — evidence is thin."
+        ],
+        "summary": "[FAIL] Tau-targeting therapies | confidence=0.29 | rejected ('Tau-targeting therapies' does not resemble a recognised drug name.)"
+      }
+    ],
+    "stats": {
+      "total": 8,
+      "passed": 0,
+      "warned": 0,
+      "failed": 8,
+      "pass_rate": 0.0,
+      "avg_original_confidence": 0.75,
+      "avg_adjusted_confidence": 0.407,
+      "top_safety_flags": []
+    }
+  }
+}
+```
